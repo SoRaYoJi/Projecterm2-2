@@ -15,6 +15,7 @@
                 <li><a href="#">Movies</a></li>
                 <li><a href="#">Cinema</a></li>
                 <li><a href="#">Promotion</a></li>
+                <li><a href="#">Promotion</a></li>
             </ul>
         </nav>
     </header>
