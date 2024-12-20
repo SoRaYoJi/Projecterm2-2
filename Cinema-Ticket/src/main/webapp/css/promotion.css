@@ -1,47 +1,73 @@
+/* พื้นหลังและโครงสร้าง */
 body {
-    font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #121212;
-    color: white;
+    font-family: 'Arial', sans-serif;
+    background-color: #1a1d29; /* พื้นหลังสีเข้ม */
+    color: white; /* สีตัวอักษรขาว */
 }
 
 header {
-    background-color: #0b6e4f;
-    padding: 10px;
-    text-align: center;
+    background: linear-gradient(to right, #005f39, #00955c); /* พื้นหลังหัวข้อไล่สี */
+    padding: 1px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
-header h1 {
+/* โลโก้ */
+.logo-container .logo {
+    height: 150px;
+    width: auto;
+}
+
+/* เมนูนำทาง */
+.nav-menu ul {
+    display: flex;
+    list-style: none;
     margin: 0;
-    color: #fff;
-}
-
-nav ul {
-    list-style-type: none;
     padding: 0;
 }
 
-nav ul li {
-    display: inline;
-    margin: 0 15px;
+.nav-menu ul li {
+    margin: 0 30px;
 }
 
-nav ul li a {
+.nav-menu ul li a {
     text-decoration: none;
-    color: #fff;
+    color: white;
+    font-weight: bold;
+    font-size: 18px;
+    transition: color 0.3s;
 }
 
-.movies {
+.nav-menu ul li a:hover {
+    color: #e1e1e1;
+}
+
+/* เมนูด้านขวา */
+.right-menu {
     display: flex;
-    justify-content: space-around;
-    margin: 20px;
+    align-items: center;
 }
 
-.movie img {
-    width: 200px;
-    height: auto;
-    border-radius: 10px;
+.search-icon {
+    font-size: 20px;
+    margin-right: 15px;
+}
+
+.lang-switch a {
+    text-decoration: none;
+    color: white;
+    margin: 0 5px;
+    font-size: 16px;
+}
+
+.user-icon img {
+    height: 40px;
+    width: 40px;
+    border-radius: 50%;
+    margin-left: 15px;
 }
 
 
