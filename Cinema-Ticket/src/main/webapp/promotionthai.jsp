@@ -17,7 +17,7 @@
             <ul>
                <li><a href="index.jsp">หน้าหลัก</a></li>
                 <li><a href="movies.jsp">ภาพยนต์</a></li>
-                <li><a href="cinema.jsp">โรงภาพยนต์</a></li>
+                <li><a href="Cinema.jsp">โรงภาพยนต์</a></li>
                 <li><a href="promotion.jsp">โปรโมชั่น</a></li>
             </ul>
             <div class="lang-switch">
