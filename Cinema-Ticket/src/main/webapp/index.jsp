@@ -1,3 +1,4 @@
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,11 +12,14 @@
         <h1>VL CINEPLEX</h1>
         <nav>
             <ul>																				
-                <li><a href="#">Home page</a></li>
-                <li><a href="#">Movies</a></li>
-                <li><a href="#">Cinema</a></li>
-                <li><a href="#">Promotion</a></li>
+                <li><a href="index.jsp">Home page</a></li>
+                <li><a href="movies.jsp">Movies</a></li>
+                <li><a href="promotion.jsp">Cinema</a></li>
+                <li><a href="contact.jsp">Promotion</a></li>
             </ul>
+            <div class="lang-switch">
+                <a href="#">EN</a> | <a href="#">TH</a>
+            </div>
         </nav>
     </header>
 
