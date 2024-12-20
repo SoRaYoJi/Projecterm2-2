@@ -32,7 +32,7 @@
             <div class="movie-list">
 
                 <div class="movie-card">
-                    <img src="images/dune.jpg" alt="Dune">
+                    <img src="images/ghostbusters.jpg" alt="Dune">
                     <h3>J U N E</h3>
                     <p>9 NOV 2024</p>
                     <span>130 นาที</span>
