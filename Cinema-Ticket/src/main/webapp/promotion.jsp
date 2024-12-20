@@ -17,7 +17,7 @@
             <ul>
                <li><a href="index.jsp">Home page</a></li>
                 <li><a href="movies.jsp">Movies</a></li>
-                <li><a href="cinema.jsp">Cinema</a></li>
+                <li><a href="Cinema.jsp">Cinema</a></li>
                 <li><a href="promotion.jsp">Promotion</a></li>
             </ul>
             <div class="lang-switch">
