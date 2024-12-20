@@ -14,8 +14,8 @@
             <ul>																				
                 <li><a href="index.jsp">Home page</a></li>
                 <li><a href="movies.jsp">Movies</a></li>
-                <li><a href="promotion.jsp">Cinema</a></li>
-                <li><a href="contact.jsp">Promotion</a></li>
+                <li><a href="Cinema.jsp">Cinema</a></li>
+                <li><a href="promotion.jsp">Promotion</a></li>
             </ul>
             <div class="lang-switch">
                 <a href="#">EN</a> | <a href="#">TH</a>
