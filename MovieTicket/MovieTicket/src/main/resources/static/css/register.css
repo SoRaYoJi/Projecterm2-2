@@ -1,0 +1,78 @@
+/* ตัวเลือกพื้นฐานของหน้า */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f9;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+/* กล่องฟอร์ม */
+form {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 300px;
+}
+
+/* หัวข้อ */
+h2 {
+    text-align: center;
+    color: #388e3c; /* สีเขียว */
+}
+
+/* ช่องกรอกข้อมูล */
+div {
+    margin-bottom: 15px;
+}
+
+label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #388e3c; /* สีเขียว */
+}
+
+input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #388e3c; /* ขอบสีเขียว */
+    border-radius: 4px;
+    font-size: 16px;
+    margin-top: 5px;
+}
+
+/* ปุ่มส่งฟอร์ม */
+button {
+    background-color: #388e3c; /* สีเขียว */
+    color: white;
+    border: none;
+    padding: 10px;
+    width: 100%;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 15px;
+}
+
+button:hover {
+    background-color: #2c6b31; /* สีเขียวเข้มเมื่อ hover */
+}
+
+/* ลิงก์ */
+p {
+    text-align: center;
+    font-size: 14px;
+}
+
+a {
+    color: #388e3c; /* สีเขียว */
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
