@@ -83,42 +83,42 @@
 
             <!-- Movie List -->
             <div class="movie-list">
-                <div class="movie-card" onclick="window.location.href='cinema.jsp';">
+                <div class="movie-card" onclick="window.location.href='cinema.jsp?movieName=GHOSTBUSTERS';">
                     <img src="images/ghostbusters.jpg" alt="Ghostbusters">
                     <h3>GHOSTBUSTERS</h3>
                     <p>9 NOV 2024</p>
                     <span>120 นาที</span>
                 </div>
 
-                <div class="movie-card" onclick="window.location.href='cinema.jsp';">
+                <div class="movie-card" onclick="window.location.href='cinema.jsp?movieName=DUNE';">
                     <img src="images/dune.jpg" alt="Dune">
                     <h3>DUNE</h3>
                     <p>9 NOV 2024</p>
                     <span>130 นาที</span>
                 </div>
 
-                <div class="movie-card" onclick="window.location.href='cinema.jsp';">
+                <div class="movie-card" onclick="window.location.href='cinema.jsp?movieName=THE END';">
                     <img src="images/the-end.jpg" alt="The End">
                     <h3>THE END</h3>
                     <p>9 NOV 2024</p>
                     <span>141 นาที</span>
                 </div>
 
-                <div class="movie-card" onclick="window.location.href='cinema.jsp';">
+                <div class="movie-card" onclick="window.location.href='cinema.jsp?movieName=The Con-Heartist';">
                     <img src="images/The Con-Heartist.jpg" alt="The Con-Heartist">
                     <h3>The Con-Heartist</h3>
                     <p>10 NOV 2024</p>
                     <span>118 นาที</span>
                 </div>
 
-                <div class="movie-card" onclick="window.location.href='cinema.jsp';">
+                <div class="movie-card" onclick="window.location.href='cinema.jsp?movieName=พี่นาค 3';">
                     <img src="images/พี่นาค 3.jpg" alt="พี่นาค 3">
                     <h3>พี่นาค 3</h3>
                     <p>10 NOV 2024</p>
                     <span>120 นาที</span>
                 </div>
 
-                <div class="movie-card" onclick="window.location.href='cinema.jsp';">
+                <div class="movie-card" onclick="window.location.href='cinema.jsp?movieName=ขุนพันธ์ 3';">
                     <img src="images/ขุนพันธ์-ภาค-3.jpg" alt="ขุนพันธ์ 3">
                     <h3>ขุนพันธ์ 3</h3>
                     <p>10 NOV 2024</p>
