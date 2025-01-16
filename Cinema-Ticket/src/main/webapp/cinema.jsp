@@ -40,7 +40,9 @@
 
 
     <!-- Content -->
-
+    <%
+    String movieName = request.getParameter("movieName");
+    %>
         <h2 class="region-title">BY LOCATION</h2>
     <div class="location-container">
         <!-- ภาคกลาง -->
@@ -49,7 +51,9 @@
             <ul class="cinema-list">
                 <li>
                     <img src="vl_white.png" alt="VL Cinema Logo">
+                    <a href="seat.jsp?movieName=<%= movieName %>&cinemaName=กรุงเทพ" class="location-link">
                     <span>กรุงเทพ</span>
+                    </a>
                     <span class="star">★</span>
                 </li>
                 <!-- เพิ่มสาขาอื่นๆ -->
@@ -62,7 +66,9 @@
             <ul class="cinema-list">
                 <li>
                     <img src="vl_white.png" alt="VL Cinema Logo">
+                    <a href="seat.jsp?movieName=<%= movieName %>&cinemaName=เชียงใหม่" class="location-link">
                     <span>เชียงใหม่</span>
+                    </a>
                     <span class="star">★</span>
                 </li>
                 <!-- เพิ่มสาขาอื่นๆ -->
@@ -75,7 +81,9 @@
             <ul class="cinema-list">
                 <li>
                     <img src="vl_white.png" alt="VL Cinema Logo">
+                    <a href="seat.jsp?movieName=<%= movieName %>&cinemaName=อุดรธานี" class="location-link">
                     <span>อุดรธานี</span>
+                    </a>
                     <span class="star">★</span>
                 </li>
                 <!-- เพิ่มสาขาอื่นๆ -->
@@ -88,7 +96,9 @@
             <ul class="cinema-list">
                 <li>
                     <img src="vl_white.png" alt="VL Cinema Logo">
+                    <a href="seat.jsp?movieName=<%= movieName %>&cinemaName=ภูเก็ต" class="location-link">
                     <span>ภูเก็ต</span>
+                    </a>
                     <span class="star">★</span>
                 </li>
                 <!-- เพิ่มสาขาอื่นๆ -->
