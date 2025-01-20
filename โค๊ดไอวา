@@ -1,0 +1,76 @@
+package com.project.MovieTicket.Entity;
+
+import jakarta.persistence.*;
+import java.util.Date;
+
+@Entity
+@Table(name = "movies")
+public class Movie {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int movieid;
+
+    private String moviename;
+
+    @Temporal(TemporalType.DATE)
+    private Date releasedate;
+
+    private String durationminutes;
+
+    @Lob
+    @Column(name = "image_path")
+    private byte[] imagePath;
+
+    @Transient
+    private String base64Image;
+
+    // Getters and Setters
+    public int getMovieid() {
+        return movieid;
+    }
+
+    public void setMovieid(int movieid) {
+        this.movieid = movieid;
+    }
+
+    public String getMoviename() {
+        return moviename;
+    }
+
+    public void setMoviename(String moviename) {
+        this.moviename = moviename;
+    }
+
+    public Date getReleasedate() {
+        return releasedate;
+    }
+
+    public void setReleasedate(Date releasedate) {
+        this.releasedate = releasedate;
+    }
+
+    public String getDurationminutes() {
+        return durationminutes;
+    }
+
+    public void setDurationminutes(String durationminutes) {
+        this.durationminutes = durationminutes;
+    }
+
+    public byte[] getImagePath() {
+        return imagePath;
+    }
+
+    public void setImagePath(byte[] imagePath) {
+        this.imagePath = imagePath;
+    }
+
+    public String getBase64Image() {
+        return base64Image;
+    }
+
+    public void setBase64Image(String base64Image) {
+        this.base64Image = base64Image;
+    }
+}
