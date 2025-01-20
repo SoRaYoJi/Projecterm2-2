@@ -1,0 +1,16 @@
+CREATE TABLE movie.movies (
+  movieid INT NOT NULL AUTO_INCREMENT,
+  moviename VARCHAR(45) NULL,
+  releasedate DATE NULL,
+  durationminutes VARCHAR(45) NULL,
+  image_path VARCHAR(255) NULL,  -- เปลี่ยนจาก LONGBLOB เป็น VARCHAR เพื่อเก็บ path
+  PRIMARY KEY (movieid)
+);
+-- 6. เพิ่มข้อมูลตัวอย่างในตาราง Movies
+INSERT INTO movies (moviename, releasedate, durationminutes,image_path) VALUES
+('GHOSTBUSTERS', '2024-11-09', 120, "images/ghostbusters.jpg"),
+('DUNE', '2024-11-09', 130, "images/dune.jpg"),
+('THE END', '2024-11-09', 141, "images/the-end.jpg"),
+('The Con-Heartist', '2024-11-10', 118, "images/The Con-Heartist.jpg"),
+('พี่นาค 3', '2024-11-10', 120, "images/พี่นาค 3.jpg"),
+('ขุนพันธ์ 3', '2024-11-10', 120, "images/ขุนพันธ์-ภาค-3.jpg");
