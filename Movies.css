@@ -1,0 +1,210 @@
+/* พื้นหลังและโครงสร้าง */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Arial', sans-serif;
+    background-color: #1a1d29; /* พื้นหลังสีเข้ม */
+    color: white; /* สีตัวอักษรขาว */
+}
+
+header {
+    background: linear-gradient(to right, #005f39, #00955c); /* พื้นหลังหัวข้อไล่สี */
+    padding: 1px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* โลโก้ */
+.logo-container .logo {
+    height: 150px;
+    width: auto;
+}
+
+/* เมนูนำทาง */
+.nav-menu ul {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.nav-menu ul li {
+    margin: 0 30px;
+}
+
+.nav-menu ul li a {
+    text-decoration: none;
+    color: white;
+    font-weight: bold;
+    font-size: 18px;
+    transition: color 0.3s;
+}
+
+.nav-menu ul li a:hover {
+    color: #e1e1e1;
+}
+
+/* เมนูด้านขวา */
+.right-menu {
+    display: flex;
+    align-items: center;
+}
+
+.search-bar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin: 20px auto;
+    background-color: #2c2c2c;
+    padding: 10px 20px;
+    border-radius: 20px;
+    width: fit-content;
+}
+
+.search-bar input[type="text"] {
+    padding: 10px;
+    border: none;
+    border-radius: 20px;
+    font-size: 1em;
+    outline: none;
+    background-color: #444;
+    color: white;
+    width: 300px;
+}
+
+.search-bar button {
+    background-color: #ffcc00;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 20px;
+    font-size: 1em;
+    color: black;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.search-bar button:hover {
+    background-color: #e1b800;
+}
+
+.search-result-msg {
+    text-align: center;
+    font-size: 18px;
+    color: #ffcc00;
+    margin-top: 10px;  /* เพิ่มระยะห่างจาก search bar */
+}
+
+.no-movies {
+    text-align: center;
+    font-size: 18px;
+    color: #ffcc00;
+    margin-top: 10px;  /* เพิ่มระยะห่างจาก search bar */
+}
+
+.lang-switch a {
+    text-decoration: none;
+    color: white;
+    margin: 0 5px;
+    font-size: 16px;
+}
+
+.user-icon img {
+    height: 40px;
+    width: 40px;
+    border-radius: 50%;
+    margin-left: 15px;
+}
+
+/* รายการหนัง */
+.movie-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.movie-card {
+    background-color: #2c2c2c;
+    padding: 15px;
+    border-radius: 10px;
+    text-align: center;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.movie-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.movie-card img {
+    width: 100%;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+.movie-card h3 {
+    color: #ffcc00;
+    font-size: 1.2em;
+    margin: 10px 0;
+}
+
+
+/* Pagination */
+.pagination {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.pagination a {
+    color: white;
+    text-decoration: none;
+    margin: 0 10px;
+    font-weight: bold;
+}
+
+.pagination a:hover {
+    text-decoration: underline;
+    color: #ffcc00;
+}
+
+/* Footer */
+footer {
+    position: fixed; /* ทำให้ส่วน footer อยู่ที่ตำแหน่ง fixed */
+    bottom: 0; /* อยู่ที่ด้านล่างสุดของหน้า */
+    left: 0;
+    width: 100%; /* ให้ footer กว้างเต็มหน้าจอ */
+    text-align: center;
+    padding: 15px;
+    background-color: #0b6e4f;
+    color: #fff;
+    font-weight: bold;
+    font-size: 1em;
+}
+
+
+/* Additional Styling for Month Selector */
+.month-selector {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.month-selector select {
+    padding: 10px;
+    font-size: 1em;
+    border-radius: 5px;
+    background-color: #2c2c2c;
+    color: #fff;
+    border: 1px solid #444;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.month-selector select:hover {
+    background-color: #444;
+}
