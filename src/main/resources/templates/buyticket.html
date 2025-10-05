@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment - VL Cineplex</title>
+    <link rel="stylesheet" href="css/buyticket.css">
+</head>
+<body>
+<header>
+    <!-- โลโก้ -->
+    <div class="logo-container">
+        <img class="logo" src="images/vl_cineplex.png" alt="VL Cineplex">
+    </div>
+
+    <!-- เมนูนำทาง -->
+    <nav class="nav-menu">
+        <ul>
+            <li><a href="/home">Home page</a></li>
+            <li><a href="/movies">Movies</a></li>
+            <li><a href="/cinema">Cinema</a></li>
+            <li><a href="/promotion">Promotion</a></li>
+        </ul>
+    </nav>
+
+    <!-- เมนูด้านขวา -->
+    <div class="right-menu">
+        <div class="lang-switch">
+            <a href="#th">TH</a> | <a href="#en">EN</a>
+        </div>
+        <div class="user-icon">
+            <a href="/profile"><img src="images/user_icon.png" alt="User Icon"></a>
+        </div>
+    </div>
+</header>
+
+
+<div class="ticket-details">
+    <h2>รายละเอียดการจอง</h2>
+    <p><strong>ชื่อหนัง:</strong> <span id="movie-name"></span></p>
+    <div class="movie-image">
+        <img id="movie-poster" src="" alt="Movie Poster" style="width: 200px; height: auto;">
+    </div>
+    <p><strong>สาขา:</strong> <span id="cinema-branch"></span></p>
+    <p><strong>เวลา:</strong> <span id="show-time"></span></p>
+    <p><strong>จำนวนที่นั่ง:</strong> <span id="seat-count"></span></p>
+</div>
+
+<!-- ฟอร์มสำหรับการกรอกข้อมูลและชำระเงิน -->
+<form class="pay-button" action="/ticket    " method="GET">
+    <input type="email" name="email" placeholder="อีเมล" required>
+    <input type="tel" name="phone" placeholder="เบอร์โทรศัพท์มือถือ" required>
+
+    <p>เลือกช่องทางการชำระเงิน</p>
+    <div class="payment-options">
+        <label>
+            <input type="radio" name="payment" value="credit" required>
+            <div class="option">
+                <img src="images/credit-card-icon.png" alt="บัตรเครดิต / บัตรเดบิต">
+                บัตรเครดิต / บัตรเดบิต
+            </div>
+        </label>
+        <label>
+            <input type="radio" name="payment" value="KBank" required>
+            <div class="option">
+                <img src="images/kbank-icon.png" alt="KBank">
+                KBank
+            </div>
+        </label>
+        <label>
+            <input type="radio" name="payment" value="PromptPay" required>
+            <div class="option">
+                <img src="images/promptpay-icon.png" alt="PromptPay">
+                PromptPay
+            </div>
+        </label>
+    </div>
+
+    <button type="submit" class="pay-button" id="pay-button">ชำระเงิน</button>
+</form>
+<script>
+    // ดึงข้อมูลจาก URL
+    const params = new URLSearchParams(window.location.search);
+    const movie = params.get('movie');
+    const cinema = params.get('cinema');
+    const time = params.get('time');
+    const seats = parseInt(params.get('seats')) || 0;
+
+    // ราคาเฉลี่ยต่อที่นั่ง
+    const pricePerSeat = 100;
+
+    // คำนวณยอดรวม
+    const totalPrice = seats * pricePerSeat;
+
+    // อัปเดตข้อมูลในหน้า
+    const movieName = document.getElementById('movie-name');
+    const cinemaBranch = document.getElementById('cinema-branch');
+    const showTime = document.getElementById('show-time');
+    const seatCount = document.getElementById('seat-count');
+    const moviePoster = document.getElementById('movie-poster');
+    const payButton = document.getElementById('pay-button');
+
+    // กำหนดข้อมูล
+    const movieData = {
+        'dune': { name: 'Dune: Part Two', poster: 'images/dune.jpg' },
+        'ghostbusters': { name: 'Ghostbusters: Frozen Empire', poster: 'images/ghostbusters.jpg' },
+        'the-end': { name: 'The End We Start From', poster: 'images/the-end.jpg' }
+    };
+
+    if (movie && movieData[movie]) {
+        movieName.textContent = movieData[movie].name;
+        moviePoster.src = movieData[movie].poster;
+    }
+
+    cinemaBranch.textContent = cinema || '-';
+    showTime.textContent = time || '-';
+    seatCount.textContent = seats || '-';
+
+    // อัปเดตข้อความบนปุ่มชำระเงิน
+    payButton.textContent = `ชำระเงิน (${totalPrice} บาท)`;
+
+</script>
+</body>
+<footer>
+    <p>&copy; 2024 VL Cineplex</p>
+</footer>
+</html>

@@ -1,0 +1,153 @@
+/* พื้นหลังและโครงสร้าง */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Arial', sans-serif;
+    background-color: #1a1d29; /* พื้นหลังสีเข้ม */
+    color: white; /* สีตัวอักษรขาว */
+}
+
+/* ส่วนหัว */
+header {
+    background: linear-gradient(to right, #005f39, #00955c); /* พื้นหลังหัวข้อไล่สี */
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* โลโก้ */
+.logo-container .logo {
+    height: 100px;
+    width: auto;
+}
+
+/* เมนูนำทาง */
+.nav-menu ul {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.nav-menu ul li {
+    margin: 0 20px;
+}
+
+.nav-menu ul li a {
+    text-decoration: none;
+    color: white;
+    font-weight: bold;
+    font-size: 18px;
+    transition: color 0.3s;
+}
+
+.nav-menu ul li a:hover {
+    color: #e1e1e1;
+}
+
+/* เมนูด้านขวา */
+.right-menu {
+    display: flex;
+    align-items: center;
+}
+
+.lang-switch a {
+    text-decoration: none;
+    color: white;
+    margin: 0 5px;
+    font-size: 16px;
+}
+
+.user-icon img {
+    height: 40px;
+    width: 40px;
+    border-radius: 50%;
+    margin-left: 15px;
+    transition: transform 0.3s;
+}
+
+.user-icon img:hover {
+    transform: scale(1.1);
+}
+
+/* ส่วนโปรไฟล์ */
+.profile {
+    text-align: center;
+    margin: 50px auto;
+    max-width: 600px;
+    background-color: #242833; /* พื้นหลังกล่องโปรไฟล์ */
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
+}
+
+.profile h1 {
+    margin-bottom: 20px;
+    font-size: 28px;
+    color: #00c27a; /* สีเขียว */
+}
+
+.profile-details {
+    margin: 20px 0;
+    font-size: 18px;
+}
+
+.profile-details p {
+    margin: 10px 0;
+}
+
+.btn-logout {
+    display: inline-block;
+    background-color: #ff4c4c; /* สีแดง */
+    color: white;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+.btn-logout:hover {
+    background-color: #ff1a1a;
+}
+
+/* ส่วนภาพยนตร์ */
+.movies {
+    display: flex;
+    justify-content: space-around;
+    margin: 20px;
+    flex-wrap: wrap;
+}
+
+.movie {
+    text-align: center;
+    margin: 10px;
+}
+
+.movie img {
+    width: 200px;
+    height: auto;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s;
+}
+
+.movie img:hover {
+    transform: scale(1.05);
+}
+
+.movie h2 {
+    margin-top: 10px;
+    font-size: 18px;
+    color: #e1e1e1;
+}
+
+/* ส่วนท้าย */
+footer {
+    text-align: center;
+    padding: 10px;
+    background-color: #0b6e4f;
+    color: white;
+}

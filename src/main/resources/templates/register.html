@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Register</title>
+    <link rel="stylesheet" type="text/css" href="css/register.css">
+</head>
+<body>
+<div class="login-container">
+    <h2>Register</h2>
+
+    <!-- แสดงข้อความผิดพลาด (ถ้ามี) -->
+    <div class="error-message" th:if="${error}">
+        <p th:text="${error}"></p>
+    </div>
+
+    <!-- ฟอร์มสมัครสมาชิก -->
+    <form th:action="@{/register}" method="post">
+        <div>
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required />
+        </div>
+        <div class="password-container">
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required />
+            <div class="password-actions">
+                <span class="toggle-password" onclick="togglePasswordVisibility()">Show</span>
+            </div>
+        </div>
+        <button type="submit">Register</button>
+    </form>
+
+    <!-- ลิงก์กลับไป Login -->
+    <p class="register">Already have an account? <a th:href="@{/login}">Login here</a></p>
+</div>
+
+<script>
+    // ฟังก์ชันสำหรับแสดง/ซ่อนรหัสผ่าน
+    function togglePasswordVisibility() {
+        const passwordField = document.getElementById('password');
+        const toggleText = document.querySelector('.toggle-password');
+
+        if (passwordField.type === 'password') {
+            passwordField.type = 'text';
+            toggleText.textContent = 'Hide';
+        } else {
+            passwordField.type = 'password';
+            toggleText.textContent = 'Show';
+        }
+    }
+</script>
+</body>
+</html>
