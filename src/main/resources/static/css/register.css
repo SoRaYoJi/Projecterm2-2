@@ -1,0 +1,150 @@
+/* ตั้งค่าพื้นฐานสำหรับทั้งหน้า */
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #121212;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+/* สไตล์ของกล่องล็อกอิน */
+.login-container {
+    background-color: #1e1e1e;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+    padding: 30px 40px;
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+}
+
+/* หัวข้อ */
+.login-container h2 {
+    margin-bottom: 20px;
+    font-size: 24px;
+    color: #ffffff;
+}
+
+/* ช่องป้อนข้อมูล */
+.login-container label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 14px;
+    color: #ffffff;
+    text-align: left;
+}
+
+.login-container input[type="text"],
+.login-container input[type="password"] {
+    width: 100%;
+    padding: 10px 15px;
+    margin-bottom: 30px;
+    border: 1px solid #333;
+    border-radius: 5px;
+    font-size: 16px;
+    background-color: #333;
+    color: #ffffff;
+    outline: none;
+    box-sizing: border-box;
+}
+
+/* ป้องกันไอคอนทับช่องกรอกข้อความ */
+.password-container input[type="password"] {
+    padding-right: 90px; /* เพิ่มพื้นที่ว่างด้านขวา */
+}
+
+.login-container input[type="text"]:focus,
+.login-container input[type="password"]:focus {
+    border-color: #00b359;
+    box-shadow: 0 0 4px rgba(0, 179, 89, 0.5);
+}
+
+/* ตั้งค่ากล่องรหัสผ่านและการกระทำ */
+.password-container {
+    position: relative;
+}
+
+.password-container .password-actions {
+    position: absolute;
+    right: 10px;
+    bottom: 5px; /* ขยับล่างเล็กน้อย */
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* จัดการช่องว่าง */
+    gap: 8px; /* ระยะระหว่างไอคอนและลิงก์ */
+}
+
+/* รูปตา */
+.password-container .toggle-password {
+    cursor: pointer;
+    font-size: 16px;
+    color: #00b359;
+    transition: color 0.3s ease;
+}
+
+.password-container .toggle-password:hover {
+    color: #00994d;
+}
+
+/* ลิงก์ลืมรหัสผ่าน */
+.password-container .forgot-password {
+    font-size: 14px;
+    color: #00b359;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.password-container .forgot-password:hover {
+    color: #00994d;
+}
+
+/* ปุ่มเข้าสู่ระบบ */
+.login-container button {
+    width: 100%;
+    padding: 10px 15px;
+    background-color: #00b359;
+    color: #ffffff;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.login-container button:hover {
+    background-color: #00994d;
+}
+
+/* ลิงก์ */
+.login-container a {
+    text-decoration: none;
+    color: #00b359;
+    font-size: 14px;
+    transition: color 0.3s ease;
+}
+
+.login-container a:hover {
+    color: #00994d;
+}
+
+/* ข้อความลิงก์สมัครสมาชิก */
+.register {
+    margin-top: 15px;
+    font-size: 14px;
+    color: #999;
+}
+
+/* กล่องข้อความแจ้งเตือน */
+.error-message {
+    background-color: #ff4d4d;
+    color: #ffffff;
+    padding: 10px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    font-size: 14px;
+    text-align: center;
+}
+

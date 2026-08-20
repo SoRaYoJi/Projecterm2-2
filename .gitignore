@@ -1,0 +1,25 @@
+# Maven
+target/
+!.mvn/wrapper/maven-wrapper.jar
+!target/classes/META-INF/
+!target/test-classes/META-INF/
+
+# IDE / Editor
+.idea/
+*.iml
+.classpath
+.project
+.settings/
+.vscode/
+
+# OS specific
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Temporary / Zip files
+*.zip
+*.rar
+*.tar.gz

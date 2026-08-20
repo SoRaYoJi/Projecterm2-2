@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VL Cineplex</title>
+    <link rel="stylesheet" href="css/ticket.css">
+</head>
+<body>
+<header>
+    <!-- โลโก้ -->
+    <div class="logo-container">
+        <img class="logo" src="images/vl_cineplex.png" alt="VL Cineplex">
+    </div>
+
+    <!-- เมนูนำทาง -->
+    <nav class="nav-menu">
+        <ul>
+            <li><a href="/home">Home page</a></li>
+            <li><a href="/movies">Movies</a></li>
+            <li><a href="/cinema">Cinema</a></li>
+            <li><a href="/promotion">Promotion</a></li>
+        </ul>
+    </nav>
+
+    <!-- เมนูด้านขวา -->
+    <div class="right-menu">
+        <!-- ภาษา -->
+        <div class="lang-switch">
+            <a href="#th">TH</a> | <a href="#en">EN</a>
+        </div>
+        <!-- ไอคอนผู้ใช้ -->
+        <div class="user-icon">
+            <a href="/profile"><img src="images/user_icon.png" alt="User Icon"></a>
+        </div>
+    </div>
+</header>
+
+<main class="ticket-container">
+    <!-- QR Code Section -->
+
+
+    <!-- Payment Form Section -->
+    <div class="payment-form-container">
+        <h2>แจ้งโอนเงิน (ส่งสลิป)</h2>
+        <p>หากคุณได้โอนเงินแล้ว กรุณาแจ้งชำระเงินด้านล่างนี้</p>
+        <form class="payment-form" action="/receipt" method="GET">
+            <label for="bank">ชำระเงินผ่านช่องทาง</label>
+            <select id="bank" name="bank">
+                <option value="bill-payment">Bill Payment</option>
+            </select>
+
+            <label for="amount">💵 ยอดเงินที่โอน</label>
+            <input type="number" id="amount" name="amount" placeholder="กรอกยอดเงินที่โอน" required>
+
+            <div class="date-time">
+                <div>
+                    <label for="date">📅 วันที่</label>
+                    <input type="date" id="date" name="date" required>
+                </div>
+                <div>
+                    <label for="time">⏰ เวลา</label>
+                    <input type="time" id="time" name="time" required>
+                </div>
+            </div>
+
+            <label for="slip">📎 ภาพสลิปโอนเงิน</label>
+            <input type="file" id="slip" name="slip" accept="image/*" required>
+            <div class="file-name" id="file-name">ยังไม่ได้เลือกไฟล์</div>
+
+            <button type="submit">ยืนยันแจ้งโอน</button>
+        </form>
+    </div>
+</main>
+<script>
+    // ดึงค่าจาก URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const paymentMethod = urlParams.get('payment');
+
+    // ตั้งค่า default ให้กับ select element
+    window.onload = () => {
+        const selectElement = document.getElementById('bank');
+        if (paymentMethod) {
+            // เพิ่ม option ตามค่าที่เลือกใน buyticket.html
+            const option = document.createElement('option');
+            option.value = paymentMethod;
+            option.textContent = paymentMethod;
+            option.selected = true;
+            selectElement.appendChild(option);
+        }
+    };
+
+    document.getElementById('slip').addEventListener('change', function () {
+        const fileName = this.files[0]?.name || 'ยังไม่ได้เลือกไฟล์';
+        document.getElementById('file-name').textContent = fileName;
+    });
+</script>
+</body>
+

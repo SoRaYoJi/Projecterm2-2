@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Receipt - VL Cineplex</title>
+  <link rel="stylesheet" href="css/receipt.css">
+</head>
+<body>
+<header>
+  <!-- โลโก้ -->
+  <div class="logo-container">
+    <img class="logo" src="images/vl_cineplex.png" alt="VL Cineplex">
+  </div>
+
+  <!-- เมนูนำทาง -->
+  <nav class="nav-menu">
+    <ul>
+      <li><a href="/home">Home page</a></li>
+      <li><a href="/movies">Movies</a></li>
+      <li><a href="/cinema">Cinema</a></li>
+      <li><a href="/promotion">Promotion</a></li>
+    </ul>
+  </nav>
+
+  <!-- เมนูด้านขวา -->
+  <div class="right-menu">
+    <div class="lang-switch">
+      <a href="#th">TH</a> | <a href="#en">EN</a>
+    </div>
+    <div class="user-icon">
+      <a href="/profile"><img src="images/user_icon.png" alt="User Icon"></a>
+    </div>
+  </div>
+</header>
+
+<div class="receipt-container">
+  <h2>ชำระเงินสำเร็จแล้ว</h2>
+  <p><strong>รหัสตั๋ว:</strong> 123456789 <span id="movie-name"></span></p>
+  <div class="movie-image">
+    <img id="movie-poster" src="images/qrcode.png" alt="QR Code" style="width: 200px; height: auto;">
+  </div>
+  <p><strong>เวลาชำระเงิน:</strong> <span id="show-time"></span></p>
+</div>
+
+<footer>
+  <p>&copy; 2024 VL Cineplex</p>
+</footer>
+
+<script>
+  // ดึงข้อมูลจาก URL
+  const params = new URLSearchParams(window.location.search);
+  const movie = params.get('movie');
+  const cinema = params.get('cinema');
+  const time = params.get('time');
+  const seats = parseInt(params.get('seats')) || 0;
+
+  // ราคาเฉลี่ยต่อที่นั่ง
+  const pricePerSeat = 100;
+
+  // คำนวณยอดรวม
+  const totalPrice = seats * pricePerSeat;
+
+  // อัปเดตข้อมูลในหน้า
+  const movieName = document.getElementById('movie-name');
+  const cinemaBranch = document.getElementById('cinema-branch');
+  const showTime = document.getElementById('show-time');
+  const seatCount = document.getElementById('seat-count');
+  const moviePoster = document.getElementById('movie-poster');
+  const payButton = document.getElementById('pay-button');
+
+  // กำหนดข้อมูล
+  const movieData = {
+    'dune': { name: 'Dune: Part Two', poster: 'images/dune.jpg' },
+    'ghostbusters': { name: 'Ghostbusters: Frozen Empire', poster: 'images/ghostbusters.jpg' },
+    'the-end': { name: 'The End We Start From', poster: 'images/the-end.jpg' }
+  };
+
+  if (movie && movieData[movie]) {
+    movieName.textContent = movieData[movie].name;
+    moviePoster.src = movieData[movie].poster;
+  }
+
+  cinemaBranch.textContent = cinema || '-';
+  showTime.textContent = time || '-';
+  seatCount.textContent = seats || '-';
+</script>
+</body>
+</html>
