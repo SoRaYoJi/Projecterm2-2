@@ -8,6 +8,7 @@ import java.util.List;
 
 @Repository
 public interface MovieRepository extends JpaRepository<Movie, Integer> {
-    // ค้นหาโดย moviename (Case-Insensitive)
-    List<Movie> findByMovienameContainingIgnoreCase(String moviename);
+    List<Movie> findByTitleContainingIgnoreCase(String title);
+    List<Movie> findByIsNowShowingTrue();
+    List<Movie> findByGenreContainingIgnoreCase(String genre);
 }

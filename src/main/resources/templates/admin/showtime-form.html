@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="th">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title th:text="${editMode ? 'แก้ไขรอบฉาย' : 'เพิ่มรอบฉาย'} + ' — Admin'">Showtime Form</title>
+  <link rel="stylesheet" th:href="@{/css/admin.css}">
+</head>
+<body>
+<div class="admin-layout">
+  <aside class="admin-sidebar">
+    <div class="sidebar-logo">VL<span>.</span>Cineplex<small>Admin Panel</small></div>
+    <nav class="sidebar-nav">
+      <div class="sidebar-section-label">หลัก</div>
+      <a href="/admin/dashboard" class="sidebar-link"><span class="icon">📊</span> Dashboard</a>
+      <div class="sidebar-section-label">จัดการข้อมูล</div>
+      <a href="/admin/movies" class="sidebar-link"><span class="icon">🎬</span> ภาพยนตร์</a>
+      <a href="/admin/showtimes" class="sidebar-link active"><span class="icon">🕐</span> รอบฉาย</a>
+      <a href="/admin/promotions" class="sidebar-link"><span class="icon">🎁</span> โปรโมชั่น</a>
+    </nav>
+    <div class="sidebar-footer"><a href="/admin/logout">🚪 ออกจากระบบ</a></div>
+  </aside>
+  <main class="admin-main">
+    <div class="admin-topbar">
+      <div><div class="page-title" th:text="${editMode ? '✏ แก้ไขรอบฉาย' : '+ เพิ่มรอบฉาย'}">Form</div><div class="breadcrumb">Admin › Showtimes › Form</div></div>
+      <a href="/admin/showtimes" class="btn btn-ghost">← กลับ</a>
+    </div>
+    <div class="admin-content">
+      <div class="form-page">
+        <div class="form-card">
+          <h3>ข้อมูลรอบฉาย</h3>
+          <form th:action="${editMode ? '/admin/showtimes/edit/' + showtime.id : '/admin/showtimes/add'}" method="post">
+            <div class="form-group">
+              <label class="form-label">ภาพยนตร์ *</label>
+              <select name="movieId" class="form-control" required>
+                <option value="">-- เลือกภาพยนตร์ --</option>
+                <option th:each="m : ${movies}" th:value="${m.id}" th:text="${m.title}"
+                        th:selected="${showtime.movie != null and showtime.movie.id == m.id}">-</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">โรงภาพยนตร์ *</label>
+              <select name="cinema" class="form-control" required>
+                <option value="">-- เลือกสาขา --</option>
+                <option value="VL Cineplex กรุงเทพ" th:selected="${showtime.cinema == 'VL Cineplex กรุงเทพ'}">VL Cineplex กรุงเทพ</option>
+                <option value="VL Cineplex เชียงใหม่" th:selected="${showtime.cinema == 'VL Cineplex เชียงใหม่'}">VL Cineplex เชียงใหม่</option>
+                <option value="VL Cineplex อุดรธานี" th:selected="${showtime.cinema == 'VL Cineplex อุดรธานี'}">VL Cineplex อุดรธานี</option>
+                <option value="VL Cineplex ภูเก็ต" th:selected="${showtime.cinema == 'VL Cineplex ภูเก็ต'}">VL Cineplex ภูเก็ต</option>
+              </select>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">วันที่ฉาย *</label>
+                <input type="date" name="showDate" class="form-control"
+                       th:value="${showtime.showDate != null ? #dates.format(showtime.showDate, 'yyyy-MM-dd') : ''}" required>
+              </div>
+              <div class="form-group">
+                <label class="form-label">เวลาฉาย *</label>
+                <input type="time" name="showTime" class="form-control" th:value="${showtime.showTime}" required>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">โรง (Hall)</label>
+                <input type="text" name="hall" class="form-control" th:value="${showtime.hall}" placeholder="Hall A">
+              </div>
+              <div class="form-group">
+                <label class="form-label">ราคา (บาท)</label>
+                <input type="number" name="price" class="form-control" th:value="${showtime.price != 0 ? showtime.price : 250}" placeholder="250" step="0.01">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">จำนวนที่นั่งทั้งหมด</label>
+                <input type="number" name="totalSeats" class="form-control" th:value="${showtime.totalSeats != 0 ? showtime.totalSeats : 80}" placeholder="80">
+              </div>
+              <div class="form-group">
+                <label class="form-label">ที่นั่งว่าง</label>
+                <input type="number" name="availableSeats" class="form-control" th:value="${showtime.availableSeats != 0 ? showtime.availableSeats : 80}" placeholder="80">
+              </div>
+            </div>
+            <div class="form-actions">
+              <button type="submit" class="btn btn-primary" th:text="${editMode ? '💾 บันทึก' : '✅ เพิ่มรอบฉาย'}">Save</button>
+              <a href="/admin/showtimes" class="btn btn-ghost">ยกเลิก</a>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+</body>
+</html>

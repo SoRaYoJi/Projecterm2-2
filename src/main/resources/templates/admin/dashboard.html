@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard — VL Cineplex</title>
+  <link rel="stylesheet" th:href="@{/css/admin.css}">
+</head>
+<body>
+<div class="admin-layout">
+
+  <!-- SIDEBAR -->
+  <aside class="admin-sidebar">
+    <div class="sidebar-logo">VL<span>.</span>Cineplex<small>Admin Panel</small></div>
+    <nav class="sidebar-nav">
+      <div class="sidebar-section-label">หลัก</div>
+      <a href="/admin/dashboard" class="sidebar-link active"><span class="icon">📊</span> Dashboard</a>
+      <div class="sidebar-section-label">จัดการข้อมูล</div>
+      <a href="/admin/movies" class="sidebar-link"><span class="icon">🎬</span> ภาพยนตร์</a>
+      <a href="/admin/showtimes" class="sidebar-link"><span class="icon">🕐</span> รอบฉาย</a>
+      <a href="/admin/promotions" class="sidebar-link"><span class="icon">🎁</span> โปรโมชั่น</a>
+      <div class="sidebar-section-label">ดูข้อมูล</div>
+      <a href="/home" target="_blank" class="sidebar-link"><span class="icon">🌐</span> ดูหน้าเว็บหลัก</a>
+    </nav>
+    <div class="sidebar-footer">
+      <a href="/admin/logout">🚪 ออกจากระบบ</a>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="admin-main">
+    <div class="admin-topbar">
+      <div>
+        <div class="page-title">Dashboard <span>ภาพรวมระบบ</span></div>
+        <div class="breadcrumb">VL Cineplex Admin</div>
+      </div>
+      <a href="/home" target="_blank" class="btn btn-outline btn-sm">🌐 ดูหน้าเว็บ</a>
+    </div>
+
+    <div class="admin-content">
+      <!-- STATS -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <span class="stat-icon">🎬</span>
+          <div>
+            <div class="stat-num" th:text="${totalMovies}">0</div>
+            <div class="stat-label">ภาพยนตร์ทั้งหมด</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <span class="stat-icon">🎟</span>
+          <div>
+            <div class="stat-num" th:text="${totalBookings}">0</div>
+            <div class="stat-label">การจองทั้งหมด</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <span class="stat-icon">🎁</span>
+          <div>
+            <div class="stat-num" th:text="${activePromotions}">0</div>
+            <div class="stat-label">โปรโมชั่นที่ใช้งาน</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <span class="stat-icon">🕐</span>
+          <div>
+            <div class="stat-num" th:text="${totalShowtimes}">0</div>
+            <div class="stat-label">รอบฉายทั้งหมด</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- QUICK LINKS -->
+      <div style="display:flex; gap:12px; margin-bottom:32px; flex-wrap:wrap;">
+        <a href="/admin/movies/add" class="btn btn-primary">+ เพิ่มภาพยนตร์ใหม่</a>
+        <a href="/admin/showtimes/add" class="btn btn-outline">+ เพิ่มรอบฉาย</a>
+        <a href="/admin/promotions/add" class="btn btn-outline">+ เพิ่มโปรโมชั่น</a>
+      </div>
+
+      <!-- RECENT BOOKINGS -->
+      <div class="admin-table-wrap">
+        <div class="admin-table-header">
+          <h3>การจองล่าสุด</h3>
+        </div>
+        <div th:if="${#lists.isEmpty(recentBookings)}" style="padding:40px; text-align:center; color:var(--text-muted);">
+          ยังไม่มีการจอง
+        </div>
+        <table class="admin-table" th:unless="${#lists.isEmpty(recentBookings)}">
+          <thead>
+          <tr>
+            <th>รหัสจอง</th>
+            <th>ภาพยนตร์</th>
+            <th>ลูกค้า</th>
+            <th>รอบ</th>
+            <th>ที่นั่ง</th>
+            <th>ยอดรวม</th>
+            <th>สถานะ</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr th:each="b : ${recentBookings}">
+            <td><code style="color:var(--accent); font-size:0.8rem;" th:text="${b.bookingCode}">-</code></td>
+            <td style="max-width:180px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" th:text="${b.movieName}">-</td>
+            <td>
+              <div th:text="${b.customerName}">-</div>
+              <div style="font-size:0.75rem; color:var(--text-muted);" th:text="${b.customerEmail}">-</div>
+            </td>
+            <td><span th:text="${b.showTime}">-</span></td>
+            <td><span class="badge badge-gray" th:text="${b.seatsCount} + ' ที่นั่ง'">-</span></td>
+            <td style="font-weight:700; color:var(--accent);" th:text="${b.totalPrice} + ' ฿'">-</td>
+            <td><span class="badge badge-green" th:text="${b.status}">CONFIRMED</span></td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+</div>
+</body>
+</html>

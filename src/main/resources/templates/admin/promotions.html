@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="th">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>จัดการโปรโมชั่น — Admin</title>
+  <link rel="stylesheet" th:href="@{/css/admin.css}">
+</head>
+<body>
+<div class="admin-layout">
+  <aside class="admin-sidebar">
+    <div class="sidebar-logo">VL<span>.</span>Cineplex<small>Admin Panel</small></div>
+    <nav class="sidebar-nav">
+      <div class="sidebar-section-label">หลัก</div>
+      <a href="/admin/dashboard" class="sidebar-link"><span class="icon">📊</span> Dashboard</a>
+      <div class="sidebar-section-label">จัดการข้อมูล</div>
+      <a href="/admin/movies" class="sidebar-link"><span class="icon">🎬</span> ภาพยนตร์</a>
+      <a href="/admin/showtimes" class="sidebar-link"><span class="icon">🕐</span> รอบฉาย</a>
+      <a href="/admin/promotions" class="sidebar-link active"><span class="icon">🎁</span> โปรโมชั่น</a>
+    </nav>
+    <div class="sidebar-footer"><a href="/admin/logout">🚪 ออกจากระบบ</a></div>
+  </aside>
+  <main class="admin-main">
+    <div class="admin-topbar">
+      <div><div class="page-title">🎁 จัดการ<span>โปรโมชั่น</span></div><div class="breadcrumb">Admin › Promotions</div></div>
+      <a href="/admin/promotions/add" class="btn btn-primary">+ เพิ่มโปรโมชั่น</a>
+    </div>
+    <div class="admin-content">
+      <div class="admin-table-wrap">
+        <div class="admin-table-header">
+          <h3>โปรโมชั่นทั้งหมด (<span th:text="${#lists.size(promotions)}">0</span>)</h3>
+        </div>
+        <div th:if="${#lists.isEmpty(promotions)}" style="padding:60px; text-align:center; color:var(--text-muted);">
+          ยังไม่มีโปรโมชั่น — <a href="/admin/promotions/add" style="color:var(--accent);">เพิ่มเลย</a>
+        </div>
+        <table class="admin-table" th:unless="${#lists.isEmpty(promotions)}">
+          <thead>
+          <tr><th>รูปภาพ</th><th>ชื่อโปรโมชั่น</th><th>ส่วนลด</th><th>ถึงวันที่</th><th>สถานะ</th><th>การจัดการ</th></tr>
+          </thead>
+          <tbody>
+          <tr th:each="p : ${promotions}">
+            <td>
+              <img th:if="${p.imageUrl != null and !p.imageUrl.isEmpty()}"
+                   th:src="${p.imageUrl}" class="poster-preview" style="aspect-ratio:16/9; width:80px; height:50px;"
+                   onerror="this.style.display='none'">
+              <span th:unless="${p.imageUrl != null and !p.imageUrl.isEmpty()}" style="font-size:2rem;">🎁</span>
+            </td>
+            <td>
+              <div style="font-weight:700;" th:text="${p.title}">-</div>
+              <div style="font-size:0.78rem; color:var(--text-muted); max-width:200px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" th:text="${p.description}">-</div>
+            </td>
+            <td>
+              <span class="badge badge-orange" th:if="${p.discountPercent > 0}" th:text="'ลด ' + ${p.discountPercent} + '%'">-</span>
+              <span class="badge badge-gray" th:unless="${p.discountPercent > 0}">พิเศษ</span>
+            </td>
+            <td th:text="${p.validTo != null ? #dates.format(p.validTo, 'dd/MM/yyyy') : '-'}">-</td>
+            <td>
+              <span class="badge badge-green" th:if="${p.active}">ใช้งาน</span>
+              <span class="badge badge-red" th:unless="${p.active}">ปิด</span>
+            </td>
+            <td>
+              <div class="table-actions">
+                <a th:href="@{/admin/promotions/edit/{id}(id=${p.id})}" class="btn btn-warning btn-sm">✏</a>
+                <form th:action="@{/admin/promotions/delete/{id}(id=${p.id})}" method="post" style="display:inline;" onsubmit="return confirm('ลบโปรโมชั่นนี้?')">
+                  <button type="submit" class="btn btn-danger btn-sm">🗑</button>
+                </form>
+              </div>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+</div>
+</body>
+</html>

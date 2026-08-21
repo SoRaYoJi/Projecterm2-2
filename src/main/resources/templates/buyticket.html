@@ -1,127 +1,140 @@
 <!DOCTYPE html>
-<html lang="th">
+<html xmlns:th="http://www.thymeleaf.org" lang="th">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Payment - VL Cineplex</title>
-    <link rel="stylesheet" href="css/buyticket.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ข้อมูลการจอง — VL Cineplex</title>
+  <link rel="stylesheet" th:href="@{/css/main.css}">
+  <style>
+    .page-wrap { margin-top: 100px; max-width: 1000px; margin-left: auto; margin-right: auto; padding: 40px; }
+    .booking-grid { display: grid; grid-template-columns: 1fr 360px; gap: 32px; }
+    .order-summary {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: var(--radius-lg); padding: 24px; position: sticky; top: 88px;
+    }
+    .order-summary h3 { font-size: 1rem; font-weight: 700; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+    .order-row { display: flex; justify-content: space-between; padding: 8px 0; font-size: 0.9rem; border-bottom: 1px solid var(--border); }
+    .order-row:last-of-type { border: none; }
+    .order-total { display: flex; justify-content: space-between; padding: 16px 0 0; font-size: 1.2rem; font-weight: 900; }
+    .order-total span { color: var(--accent-orange); }
+    .payment-methods { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 12px; }
+    .pay-option input[type="radio"] { display: none; }
+    .pay-option label {
+      display: flex; align-items: center; gap: 10px;
+      padding: 12px 16px; border-radius: var(--radius);
+      border: 1.5px solid var(--border); cursor: pointer;
+      transition: all 0.2s; font-size: 0.9rem; font-weight: 500;
+    }
+    .pay-option input:checked + label { border-color: var(--accent-orange); background: rgba(249,115,22,0.08); color: var(--accent-orange); }
+    .pay-icon { font-size: 1.3rem; }
+    @media (max-width:768px) { .booking-grid { grid-template-columns: 1fr; } .page-wrap { padding: 20px; } }
+  </style>
 </head>
 <body>
-<header>
-    <!-- โลโก้ -->
-    <div class="logo-container">
-        <img class="logo" src="images/vl_cineplex.png" alt="VL Cineplex">
+
+<nav class="navbar">
+  <a href="/" class="navbar-brand">VL<span>.</span>Cineplex</a>
+  <ul class="navbar-nav">
+    <li><a href="/home">หน้าแรก</a></li>
+    <li><a href="/movies">ภาพยนตร์</a></li>
+    <li><a href="/promotion">โปรโมชั่น</a></li>
+  </ul>
+</nav>
+
+<div class="page-wrap">
+  <div style="margin-bottom:32px;">
+    <div style="display:flex; align-items:center; gap:16px; margin-bottom:8px;">
+      <a href="javascript:history.back()" style="color:var(--text-muted); text-decoration:none; font-size:0.9rem;">← กลับ</a>
+      <span style="color:var(--border)">|</span>
+      <span style="font-size:0.85rem; color:var(--text-muted);">ขั้นตอนที่ 2 จาก 3</span>
     </div>
+    <h1 style="font-size:1.8rem; font-weight:900;">กรอก<span style="color:var(--accent-orange)">ข้อมูล</span>ผู้จอง</h1>
+  </div>
 
-    <!-- เมนูนำทาง -->
-    <nav class="nav-menu">
-        <ul>
-            <li><a href="/home">Home page</a></li>
-            <li><a href="/movies">Movies</a></li>
-            <li><a href="/cinema">Cinema</a></li>
-            <li><a href="/promotion">Promotion</a></li>
-        </ul>
-    </nav>
+  <form action="/submit-booking" method="POST">
+    <input type="hidden" name="movie" th:value="${movieName}">
+    <input type="hidden" name="cinema" th:value="${cinema}">
+    <input type="hidden" name="time" th:value="${time}">
+    <input type="hidden" name="date" th:value="${date}">
+    <input type="hidden" name="hall" th:value="${hall}">
+    <input type="hidden" name="seats" th:value="${seats}">
+    <input type="hidden" name="seatNumbers" th:value="${seatNumbers}">
+    <input type="hidden" name="price" th:value="${price}">
 
-    <!-- เมนูด้านขวา -->
-    <div class="right-menu">
-        <div class="lang-switch">
-            <a href="#th">TH</a> | <a href="#en">EN</a>
+    <div class="booking-grid">
+      <div>
+        <!-- Personal Info -->
+        <div class="card" style="margin-bottom:24px;">
+          <h3 style="font-size:1rem; font-weight:700; margin-bottom:20px;">ข้อมูลส่วนตัว</h3>
+          <div class="form-group">
+            <label class="form-label">ชื่อ - นามสกุล *</label>
+            <input type="text" name="customerName" class="form-control" placeholder="กรอกชื่อ - นามสกุล" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">อีเมล (รับยืนยันการจอง) *</label>
+            <input type="email" name="customerEmail" class="form-control" placeholder="example@email.com" required>
+          </div>
+          <div class="form-group" style="margin-bottom:0;">
+            <label class="form-label">เบอร์โทรศัพท์ *</label>
+            <input type="tel" name="customerPhone" class="form-control" placeholder="0XX-XXX-XXXX" required>
+          </div>
         </div>
-        <div class="user-icon">
-            <a href="/profile"><img src="images/user_icon.png" alt="User Icon"></a>
+
+        <!-- Payment -->
+        <div class="card">
+          <h3 style="font-size:1rem; font-weight:700; margin-bottom:16px;">ช่องทางชำระเงิน</h3>
+          <div class="payment-methods">
+            <div class="pay-option">
+              <input type="radio" name="paymentMethod" id="pm-promptpay" value="PromptPay" checked>
+              <label for="pm-promptpay"><span class="pay-icon">📱</span> PromptPay</label>
+            </div>
+            <div class="pay-option">
+              <input type="radio" name="paymentMethod" id="pm-card" value="Credit Card">
+              <label for="pm-card"><span class="pay-icon">💳</span> บัตรเครดิต</label>
+            </div>
+            <div class="pay-option">
+              <input type="radio" name="paymentMethod" id="pm-bank" value="Internet Banking">
+              <label for="pm-bank"><span class="pay-icon">🏦</span> โอนเงิน</label>
+            </div>
+            <div class="pay-option">
+              <input type="radio" name="paymentMethod" id="pm-counter" value="Counter Service">
+              <label for="pm-counter"><span class="pay-icon">🏪</span> Counter Service</label>
+            </div>
+          </div>
+          <div class="alert alert-info" style="margin-top:16px; margin-bottom:0;">
+            ℹ️ ระบบชำระเงินจริงสามารถเพิ่มเติมได้ในภายหลัง — ตอนนี้จะบันทึกการจองทันที
+          </div>
         </div>
-    </div>
-</header>
+      </div>
 
-
-<div class="ticket-details">
-    <h2>รายละเอียดการจอง</h2>
-    <p><strong>ชื่อหนัง:</strong> <span id="movie-name"></span></p>
-    <div class="movie-image">
-        <img id="movie-poster" src="" alt="Movie Poster" style="width: 200px; height: auto;">
+      <!-- ORDER SUMMARY -->
+      <div class="order-summary">
+        <h3>สรุปคำสั่งจอง</h3>
+        <div class="order-row"><span class="text-secondary">ภาพยนตร์</span><span class="fw-bold" th:text="${movieName}" style="text-align:right; max-width:160px;">-</span></div>
+        <div class="order-row"><span class="text-secondary">โรงภาพยนตร์</span><span th:text="${cinema}">-</span></div>
+        <div class="order-row"><span class="text-secondary">รอบฉาย</span><span th:text="${time}">-</span></div>
+        <div class="order-row" th:if="${hall != null and hall != ''}"><span class="text-secondary">โรง</span><span th:text="${hall}">-</span></div>
+        <div class="order-row"><span class="text-secondary">ที่นั่ง</span><span th:text="${seatNumbers != null and seatNumbers != '' ? seatNumbers : seats + ' ที่นั่ง'}">-</span></div>
+        <div class="order-row"><span class="text-secondary">จำนวน</span><span th:text="${seats} + ' ที่นั่ง'">-</span></div>
+        <div class="order-row"><span class="text-secondary">ราคา/ที่นั่ง</span><span th:text="${price} + ' ฿'">-</span></div>
+        <div class="order-total">
+          <span>รวมทั้งหมด</span>
+          <span th:text="${totalPrice} + ' ฿'">0 ฿</span>
+        </div>
+        <button type="submit" class="btn btn-primary btn-lg" style="width:100%; justify-content:center; margin-top:20px;">
+          ✅ ยืนยันการจอง
+        </button>
+        <p style="font-size:0.78rem; color:var(--text-muted); text-align:center; margin-top:12px;">
+          กดยืนยัน = ยอมรับเงื่อนไขและข้อกำหนด
+        </p>
+      </div>
     </div>
-    <p><strong>สาขา:</strong> <span id="cinema-branch"></span></p>
-    <p><strong>เวลา:</strong> <span id="show-time"></span></p>
-    <p><strong>จำนวนที่นั่ง:</strong> <span id="seat-count"></span></p>
+  </form>
 </div>
 
-<!-- ฟอร์มสำหรับการกรอกข้อมูลและชำระเงิน -->
-<form class="pay-button" action="/ticket    " method="GET">
-    <input type="email" name="email" placeholder="อีเมล" required>
-    <input type="tel" name="phone" placeholder="เบอร์โทรศัพท์มือถือ" required>
-
-    <p>เลือกช่องทางการชำระเงิน</p>
-    <div class="payment-options">
-        <label>
-            <input type="radio" name="payment" value="credit" required>
-            <div class="option">
-                <img src="images/credit-card-icon.png" alt="บัตรเครดิต / บัตรเดบิต">
-                บัตรเครดิต / บัตรเดบิต
-            </div>
-        </label>
-        <label>
-            <input type="radio" name="payment" value="KBank" required>
-            <div class="option">
-                <img src="images/kbank-icon.png" alt="KBank">
-                KBank
-            </div>
-        </label>
-        <label>
-            <input type="radio" name="payment" value="PromptPay" required>
-            <div class="option">
-                <img src="images/promptpay-icon.png" alt="PromptPay">
-                PromptPay
-            </div>
-        </label>
-    </div>
-
-    <button type="submit" class="pay-button" id="pay-button">ชำระเงิน</button>
-</form>
-<script>
-    // ดึงข้อมูลจาก URL
-    const params = new URLSearchParams(window.location.search);
-    const movie = params.get('movie');
-    const cinema = params.get('cinema');
-    const time = params.get('time');
-    const seats = parseInt(params.get('seats')) || 0;
-
-    // ราคาเฉลี่ยต่อที่นั่ง
-    const pricePerSeat = 100;
-
-    // คำนวณยอดรวม
-    const totalPrice = seats * pricePerSeat;
-
-    // อัปเดตข้อมูลในหน้า
-    const movieName = document.getElementById('movie-name');
-    const cinemaBranch = document.getElementById('cinema-branch');
-    const showTime = document.getElementById('show-time');
-    const seatCount = document.getElementById('seat-count');
-    const moviePoster = document.getElementById('movie-poster');
-    const payButton = document.getElementById('pay-button');
-
-    // กำหนดข้อมูล
-    const movieData = {
-        'dune': { name: 'Dune: Part Two', poster: 'images/dune.jpg' },
-        'ghostbusters': { name: 'Ghostbusters: Frozen Empire', poster: 'images/ghostbusters.jpg' },
-        'the-end': { name: 'The End We Start From', poster: 'images/the-end.jpg' }
-    };
-
-    if (movie && movieData[movie]) {
-        movieName.textContent = movieData[movie].name;
-        moviePoster.src = movieData[movie].poster;
-    }
-
-    cinemaBranch.textContent = cinema || '-';
-    showTime.textContent = time || '-';
-    seatCount.textContent = seats || '-';
-
-    // อัปเดตข้อความบนปุ่มชำระเงิน
-    payButton.textContent = `ชำระเงิน (${totalPrice} บาท)`;
-
-</script>
-</body>
 <footer>
-    <p>&copy; 2024 VL Cineplex</p>
+  <p>© 2024 VL Cineplex</p>
 </footer>
+
+</body>
 </html>

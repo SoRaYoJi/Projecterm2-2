@@ -1,89 +1,133 @@
 <!DOCTYPE html>
-<html lang="th">
+<html xmlns:th="http://www.thymeleaf.org" lang="th">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Receipt - VL Cineplex</title>
-  <link rel="stylesheet" href="css/receipt.css">
+  <title>ยืนยันการจอง — VL Cineplex</title>
+  <link rel="stylesheet" th:href="@{/css/main.css}">
+  <style>
+    .receipt-wrap { margin-top: 100px; max-width: 560px; margin-left: auto; margin-right: auto; padding: 40px; }
+    .receipt-card {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: var(--radius-lg); overflow: hidden;
+    }
+    .receipt-header {
+      background: linear-gradient(135deg, var(--accent-orange), #dc2626);
+      padding: 32px; text-align: center;
+    }
+    .receipt-header .check { font-size: 3.5rem; margin-bottom: 12px; display: block; }
+    .receipt-header h2 { font-size: 1.5rem; font-weight: 900; color: white; margin-bottom: 4px; }
+    .receipt-header p { color: rgba(255,255,255,0.8); font-size: 0.9rem; }
+    .booking-code {
+      display: inline-block;
+      background: rgba(0,0,0,0.3);
+      border: 2px dashed rgba(255,255,255,0.5);
+      color: white; font-size: 1.5rem; font-weight: 900;
+      padding: 8px 24px; border-radius: var(--radius); margin-top: 16px;
+      letter-spacing: 3px;
+    }
+    .receipt-body { padding: 32px; }
+    .receipt-row {
+      display: flex; justify-content: space-between; align-items: flex-start;
+      padding: 12px 0; border-bottom: 1px solid var(--border);
+    }
+    .receipt-row:last-child { border: none; }
+    .receipt-label { font-size: 0.82rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+    .receipt-value { font-weight: 700; text-align: right; max-width: 220px; }
+    .receipt-total { background: var(--bg-secondary); border-radius: var(--radius); padding: 16px 24px; margin: 20px 0; }
+    .receipt-total-row { display: flex; justify-content: space-between; align-items: center; }
+    .receipt-total-row .label { font-size: 0.9rem; color: var(--text-secondary); }
+    .receipt-total-row .amount { font-size: 2rem; font-weight: 900; color: var(--accent-orange); }
+    .qr-placeholder {
+      width: 140px; height: 140px; background: white; border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 2.5rem; margin: 0 auto 16px;
+    }
+    .actions { display: flex; gap: 12px; margin-top: 24px; }
+    .actions .btn { flex: 1; justify-content: center; }
+  </style>
 </head>
 <body>
-<header>
-  <!-- โลโก้ -->
-  <div class="logo-container">
-    <img class="logo" src="images/vl_cineplex.png" alt="VL Cineplex">
-  </div>
 
-  <!-- เมนูนำทาง -->
-  <nav class="nav-menu">
-    <ul>
-      <li><a href="/home">Home page</a></li>
-      <li><a href="/movies">Movies</a></li>
-      <li><a href="/cinema">Cinema</a></li>
-      <li><a href="/promotion">Promotion</a></li>
-    </ul>
-  </nav>
+<nav class="navbar">
+  <a href="/" class="navbar-brand">VL<span>.</span>Cineplex</a>
+  <ul class="navbar-nav">
+    <li><a href="/home">หน้าแรก</a></li>
+    <li><a href="/movies">ภาพยนตร์</a></li>
+  </ul>
+</nav>
 
-  <!-- เมนูด้านขวา -->
-  <div class="right-menu">
-    <div class="lang-switch">
-      <a href="#th">TH</a> | <a href="#en">EN</a>
+<div class="receipt-wrap">
+  <div class="receipt-card">
+    <div class="receipt-header">
+      <span class="check">✅</span>
+      <h2>จองตั๋วสำเร็จ!</h2>
+      <p>ขอบคุณที่เลือกใช้บริการ VL Cineplex</p>
+      <div class="booking-code" th:text="${booking.bookingCode}">VL-XXXXXXXX</div>
     </div>
-    <div class="user-icon">
-      <a href="/profile"><img src="images/user_icon.png" alt="User Icon"></a>
+
+    <div class="receipt-body">
+      <!-- QR Code Placeholder -->
+      <div style="text-align:center; margin-bottom:24px; padding-bottom:24px; border-bottom:1px solid var(--border);">
+        <div class="qr-placeholder">📱</div>
+        <p style="font-size:0.8rem; color:var(--text-muted);">สแกน QR Code ที่หน้าโรงภาพยนตร์</p>
+      </div>
+
+      <div class="receipt-row">
+        <div class="receipt-label">ภาพยนตร์</div>
+        <div class="receipt-value" th:text="${booking.movieName}">-</div>
+      </div>
+      <div class="receipt-row">
+        <div class="receipt-label">โรงภาพยนตร์</div>
+        <div class="receipt-value" th:text="${booking.cinema}">-</div>
+      </div>
+      <div class="receipt-row" th:if="${booking.hall != null and booking.hall != ''}">
+        <div class="receipt-label">โรง</div>
+        <div class="receipt-value" th:text="${booking.hall}">-</div>
+      </div>
+      <div class="receipt-row">
+        <div class="receipt-label">รอบฉาย</div>
+        <div class="receipt-value" th:text="${booking.showTime}">-</div>
+      </div>
+      <div class="receipt-row">
+        <div class="receipt-label">ที่นั่ง</div>
+        <div class="receipt-value" th:text="${booking.seatNumbers != null and booking.seatNumbers != '' ? booking.seatNumbers : booking.seatsCount + ' ที่นั่ง'}">-</div>
+      </div>
+      <div class="receipt-row">
+        <div class="receipt-label">ชื่อผู้จอง</div>
+        <div class="receipt-value" th:text="${booking.customerName}">-</div>
+      </div>
+      <div class="receipt-row">
+        <div class="receipt-label">อีเมล</div>
+        <div class="receipt-value" th:text="${booking.customerEmail}">-</div>
+      </div>
+      <div class="receipt-row">
+        <div class="receipt-label">วิธีชำระเงิน</div>
+        <div class="receipt-value" th:text="${booking.paymentMethod}">-</div>
+      </div>
+
+      <div class="receipt-total">
+        <div class="receipt-total-row">
+          <span class="label">ยอดรวมทั้งหมด</span>
+          <span class="amount" th:text="${booking.totalPrice} + ' ฿'">0 ฿</span>
+        </div>
+      </div>
+
+      <div class="alert alert-success">
+        ✅ <strong>CONFIRMED</strong> — รหัสจอง <strong th:text="${booking.bookingCode}">-</strong> ใช้แสดงที่หน้าโรง
+      </div>
+
+      <div class="actions">
+        <button onclick="window.print()" class="btn btn-outline">🖨 พิมพ์</button>
+        <a href="/movies" class="btn btn-primary">ดูหนังเพิ่มเติม</a>
+      </div>
     </div>
   </div>
-</header>
-
-<div class="receipt-container">
-  <h2>ชำระเงินสำเร็จแล้ว</h2>
-  <p><strong>รหัสตั๋ว:</strong> 123456789 <span id="movie-name"></span></p>
-  <div class="movie-image">
-    <img id="movie-poster" src="images/qrcode.png" alt="QR Code" style="width: 200px; height: auto;">
-  </div>
-  <p><strong>เวลาชำระเงิน:</strong> <span id="show-time"></span></p>
 </div>
 
-<footer>
-  <p>&copy; 2024 VL Cineplex</p>
+<footer style="margin-top:60px;">
+  <p>© 2024 VL Cineplex</p>
 </footer>
 
-<script>
-  // ดึงข้อมูลจาก URL
-  const params = new URLSearchParams(window.location.search);
-  const movie = params.get('movie');
-  const cinema = params.get('cinema');
-  const time = params.get('time');
-  const seats = parseInt(params.get('seats')) || 0;
-
-  // ราคาเฉลี่ยต่อที่นั่ง
-  const pricePerSeat = 100;
-
-  // คำนวณยอดรวม
-  const totalPrice = seats * pricePerSeat;
-
-  // อัปเดตข้อมูลในหน้า
-  const movieName = document.getElementById('movie-name');
-  const cinemaBranch = document.getElementById('cinema-branch');
-  const showTime = document.getElementById('show-time');
-  const seatCount = document.getElementById('seat-count');
-  const moviePoster = document.getElementById('movie-poster');
-  const payButton = document.getElementById('pay-button');
-
-  // กำหนดข้อมูล
-  const movieData = {
-    'dune': { name: 'Dune: Part Two', poster: 'images/dune.jpg' },
-    'ghostbusters': { name: 'Ghostbusters: Frozen Empire', poster: 'images/ghostbusters.jpg' },
-    'the-end': { name: 'The End We Start From', poster: 'images/the-end.jpg' }
-  };
-
-  if (movie && movieData[movie]) {
-    movieName.textContent = movieData[movie].name;
-    moviePoster.src = movieData[movie].poster;
-  }
-
-  cinemaBranch.textContent = cinema || '-';
-  showTime.textContent = time || '-';
-  seatCount.textContent = seats || '-';
-</script>
 </body>
 </html>

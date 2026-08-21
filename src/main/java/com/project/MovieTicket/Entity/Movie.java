@@ -9,56 +9,88 @@ public class Movie {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int movieid;
+    private int id;
 
-    private String moviename;
+    @Column(nullable = false)
+    private String title;
+
+    @Column(columnDefinition = "TEXT")
+    private String synopsis;
+
+    private String director;
+
+    @Column(name = "cast_list", columnDefinition = "TEXT")
+    private String castList;
+
+    @Column(name = "poster_url", length = 500)
+    private String posterUrl;
+
+    @Column(name = "trailer_url", length = 500)
+    private String trailerUrl;
+
+    private String genre;
+
+    private String language = "EN";
+
+    @Column(precision = 3, scale = 1)
+    private double rating = 0.0;
+
+    @Column(name = "duration_minutes")
+    private int durationMinutes = 120;
 
     @Temporal(TemporalType.DATE)
-    private Date releasedate;
+    @Column(name = "release_date")
+    private Date releaseDate;
 
-    private String durationminutes;
+    @Column(name = "is_now_showing")
+    private boolean isNowShowing = true;
 
-    @Column(name = "image_path")
-    private String imagePath;  // เปลี่ยนเป็น String เพื่อเก็บ path ของไฟล์ภาพ
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "created_at")
+    private Date createdAt = new Date();
 
-    // Getters and Setters
-    public int getMovieid() {
-        return movieid;
-    }
+    public Movie() {}
 
-    public void setMovieid(int movieid) {
-        this.movieid = movieid;
-    }
+    // Getters & Setters
+    public int getId() { return id; }
+    public void setId(int id) { this.id = id; }
 
-    public String getMoviename() {
-        return moviename;
-    }
+    public String getTitle() { return title; }
+    public void setTitle(String title) { this.title = title; }
 
-    public void setMoviename(String moviename) {
-        this.moviename = moviename;
-    }
+    public String getSynopsis() { return synopsis; }
+    public void setSynopsis(String synopsis) { this.synopsis = synopsis; }
 
-    public Date getReleasedate() {
-        return releasedate;
-    }
+    public String getDirector() { return director; }
+    public void setDirector(String director) { this.director = director; }
 
-    public void setReleasedate(Date releasedate) {
-        this.releasedate = releasedate;
-    }
+    public String getCastList() { return castList; }
+    public void setCastList(String castList) { this.castList = castList; }
 
-    public String getDurationminutes() {
-        return durationminutes;
-    }
+    public String getPosterUrl() { return posterUrl; }
+    public void setPosterUrl(String posterUrl) { this.posterUrl = posterUrl; }
 
-    public void setDurationminutes(String durationminutes) {
-        this.durationminutes = durationminutes;
-    }
+    public String getTrailerUrl() { return trailerUrl; }
+    public void setTrailerUrl(String trailerUrl) { this.trailerUrl = trailerUrl; }
 
-    public String getImagePath() {
-        return imagePath;
-    }
+    public String getGenre() { return genre; }
+    public void setGenre(String genre) { this.genre = genre; }
 
-    public void setImagePath(String imagePath) {
-        this.imagePath = imagePath;
-    }
+    public String getLanguage() { return language; }
+    public void setLanguage(String language) { this.language = language; }
+
+    public double getRating() { return rating; }
+    public void setRating(double rating) { this.rating = rating; }
+
+    public int getDurationMinutes() { return durationMinutes; }
+    public void setDurationMinutes(int durationMinutes) { this.durationMinutes = durationMinutes; }
+
+    public Date getReleaseDate() { return releaseDate; }
+    public void setReleaseDate(Date releaseDate) { this.releaseDate = releaseDate; }
+
+    public boolean isNowShowing() { return isNowShowing; }
+    public void setNowShowing(boolean nowShowing) { isNowShowing = nowShowing; }
+
+    public Date getCreatedAt() { return createdAt; }
+    public void setCreatedAt(Date createdAt) { this.createdAt = createdAt; }
 }

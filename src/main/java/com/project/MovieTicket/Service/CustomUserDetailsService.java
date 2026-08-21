@@ -20,12 +20,17 @@ public class CustomUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         // ค้นหาผู้ใช้จากฐานข้อมูล
         User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+                .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
 
-        // ใช้ข้อมูลผู้ใช้โดยไม่เข้ารหัสรหัสผ่าน
+        String role = (user.getRole() != null && !user.getRole().isEmpty()) ? user.getRole() : "USER";
+        if (role.startsWith("ROLE_")) {
+            role = role.substring(5);
+        }
+
         return org.springframework.security.core.userdetails.User
                 .withUsername(user.getUsername())
-                .password(user.getPassword())  // ไม่เข้ารหัสรหัสผ่าน
+                .password(user.getPassword())
+                .roles(role)
                 .build();
     }
 }

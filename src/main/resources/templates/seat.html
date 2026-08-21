@@ -1,147 +1,201 @@
 <!DOCTYPE html>
-<html lang="th">
+<html xmlns:th="http://www.thymeleaf.org" lang="th">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VL Cineplex - จองตั๋วหนัง</title>
-    <link rel="stylesheet" href="css/seat.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>เลือกที่นั่ง — VL Cineplex</title>
+  <link rel="stylesheet" th:href="@{/css/main.css}">
+  <style>
+    .page-wrap { margin-top: 68px; max-width: 1100px; margin-left: auto; margin-right: auto; padding: 40px; }
+    .booking-info-bar {
+      display: flex; gap: 24px; flex-wrap: wrap;
+      background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg);
+      padding: 20px 28px; margin-bottom: 36px; align-items: center;
+    }
+    .info-item { display: flex; flex-direction: column; gap: 2px; }
+    .info-label { font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+    .info-val { font-weight: 700; font-size: 0.95rem; }
+    .seat-layout-wrap { display: grid; grid-template-columns: 1fr 300px; gap: 40px; align-items: start; }
+    .summary-panel {
+      position: sticky; top: 88px;
+      background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 24px;
+    }
+    .summary-panel h3 { font-size: 1rem; font-weight: 700; margin-bottom: 16px; }
+    .summary-row { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 0.9rem; }
+    .summary-total { font-size: 1.3rem; font-weight: 900; color: var(--accent-orange); }
+    .selected-seats-display {
+      min-height: 40px; padding: 10px; background: var(--bg-secondary);
+      border-radius: var(--radius); margin-bottom: 16px; font-size: 0.85rem;
+      color: var(--text-muted); display: flex; flex-wrap: wrap; gap: 6px; align-items: center;
+    }
+    .selected-seat-tag {
+      background: var(--accent-orange); color: white; padding: 2px 8px;
+      border-radius: 50px; font-size: 0.8rem; font-weight: 600;
+    }
+    @media (max-width:768px) { .seat-layout-wrap { grid-template-columns: 1fr; } .page-wrap { padding: 20px; } }
+    .seat { font-size: 0.7rem; color: var(--text-muted); }
+  </style>
 </head>
 <body>
-<header>
-    <!-- โลโก้ -->
-    <div class="logo-container">
-        <img class="logo" src="images/vl_cineplex.png" alt="VL Cineplex">
+
+<nav class="navbar">
+  <a href="/" class="navbar-brand">VL<span>.</span>Cineplex</a>
+  <ul class="navbar-nav">
+    <li><a href="/home">หน้าแรก</a></li>
+    <li><a href="/movies">ภาพยนตร์</a></li>
+    <li><a href="/promotion">โปรโมชั่น</a></li>
+  </ul>
+</nav>
+
+<div class="page-wrap" style="margin-top: 100px;">
+  <div style="margin-bottom:24px;">
+    <h1 style="font-size:1.8rem; font-weight:900; letter-spacing:-0.5px;">เลือก<span style="color:var(--accent-orange)">ที่นั่ง</span></h1>
+  </div>
+
+  <div class="booking-info-bar">
+    <div class="info-item">
+      <span class="info-label">ภาพยนตร์</span>
+      <span class="info-val" th:text="${movieName}">Movie</span>
+    </div>
+    <div class="info-item">
+      <span class="info-label">โรงภาพยนตร์</span>
+      <span class="info-val" th:text="${cinema}">Cinema</span>
+    </div>
+    <div class="info-item">
+      <span class="info-label">เวลา</span>
+      <span class="info-val" style="color:var(--accent-orange);" th:text="${time}">12:00</span>
+    </div>
+    <div class="info-item">
+      <span class="info-label">โรง</span>
+      <span class="info-val" th:text="${hall}">Hall A</span>
+    </div>
+    <div class="info-item">
+      <span class="info-label">ราคา/ที่นั่ง</span>
+      <span class="info-val" th:text="${price} + ' ฿'">250 ฿</span>
+    </div>
+  </div>
+
+  <div class="seat-layout-wrap">
+    <div>
+      <div class="screen">SCREEN</div>
+      <div class="seat-map-wrapper">
+        <div id="seatMap"></div>
+      </div>
+      <div class="seat-legend">
+        <div class="legend-item"><div class="legend-box" style="background:var(--bg-secondary);border:1px solid var(--border);"></div> ว่าง</div>
+        <div class="legend-item"><div class="legend-box" style="background:var(--accent-orange);"></div> เลือกแล้ว</div>
+        <div class="legend-item"><div class="legend-box" style="background:#374151;"></div> จองแล้ว</div>
+      </div>
     </div>
 
-    <!-- เมนูนำทาง -->
-    <nav class="nav-menu">
-        <ul>
-            <li><a href="/home">Home page</a></li>
-            <li><a href="/movies">Movies</a></li>
-            <li><a href="/cinema">Cinema</a></li>
-            <li><a href="/promotion">Promotion</a></li>
-        </ul>
-    </nav>
-
-    <!-- เมนูด้านขวา -->
-    <div class="right-menu">
-        <div class="lang-switch">
-            <a href="#th">TH</a> | <a href="#en">EN</a>
-        </div>
-        <div class="user-icon">
-            <a href="/profile"><img src="images/user_icon.png" alt="User Icon"></a>
-        </div>
+    <div class="summary-panel">
+      <h3>สรุปการจอง</h3>
+      <div class="selected-seats-display" id="selectedDisplay">
+        <span style="color:var(--text-muted)">กรุณาเลือกที่นั่ง</span>
+      </div>
+      <hr class="divider">
+      <div class="summary-row">
+        <span class="text-secondary">จำนวนที่นั่ง</span>
+        <span id="seatCount" class="fw-bold">0</span>
+      </div>
+      <div class="summary-row">
+        <span class="text-secondary">ราคา/ที่นั่ง</span>
+        <span th:text="${price} + ' ฿'" class="fw-bold">250 ฿</span>
+      </div>
+      <hr class="divider">
+      <div class="summary-row">
+        <span class="fw-bold">รวมทั้งหมด</span>
+        <span id="totalPrice" class="summary-total">0 ฿</span>
+      </div>
+      <form id="bookingForm" th:action="@{/buyticket}" method="GET" style="margin-top:20px;">
+        <input type="hidden" name="movie" th:value="${movieName}">
+        <input type="hidden" name="cinema" th:value="${cinema}">
+        <input type="hidden" name="time" th:value="${time}">
+        <input type="hidden" name="date" th:value="${date}">
+        <input type="hidden" name="hall" th:value="${hall}">
+        <input type="hidden" name="price" th:value="${price}">
+        <input type="hidden" name="seats" id="seatsInput" value="0">
+        <input type="hidden" name="seatNumbers" id="seatNumbersInput" value="">
+        <button type="submit" id="confirmBtn" class="btn btn-primary" style="width:100%; justify-content:center;" disabled>
+          ยืนยันที่นั่ง →
+        </button>
+      </form>
+      <a href="javascript:history.back()" class="btn btn-ghost" style="width:100%; justify-content:center; margin-top:8px;">← กลับ</a>
     </div>
-</header>
+  </div>
+</div>
 
-<main>
-    <section class="booking">
-        <h1>เลือกจองตั๋วหนัง</h1>
-        <form class="booking-form" action="/buyticket" method="GET">
-            <!-- เลือกหนัง -->
-            <label for="movie">เลือกหนัง:</label>
-            <select id="movie" name="movie" required>
-                <option value="" disabled selected>กรุณาเลือกหนัง</option>
-                <option value="dune">Dune: Part Two</option>
-                <option value="ghostbusters">Ghostbusters: Frozen Empire</option>
-                <option value="the-end">The End We Start From</option>
-            </select>
-
-            <!-- เลือกสาขา -->
-            <label for="cinema">เลือกสาขา:</label>
-            <select id="cinema" name="cinema" required>
-                <option value="" disabled selected>กรุณาเลือกสาขา</option>
-                <option value="กรุงเทพ">Bangkok</option>
-                <option value="เชียงใหม่">Chiang Mai</option>
-                <option value="อุดรธานี">Udonthani</option>
-                <option value="ภูเก็ต">Phuket</option>
-            </select>
-
-            <!-- เลือกเวลา -->
-            <label for="time">เลือกเวลา:</label>
-            <select id="time" name="time" required>
-                <option value="" disabled selected>กรุณาเลือกเวลา</option>
-                <option value="10:00">10:00</option>
-                <option value="14:00">14:00</option>
-                <option value="18:00">18:00</option>
-                <option value="21:00">21:00</option>
-            </select>
-
-            <!-- เลือกจำนวนที่นั่ง -->
-            <label for="seats">จำนวนที่นั่ง:</label>
-            <input type="number" id="seats" name="seats" min="1" max="10" placeholder="1-10" required>
-
-            <!-- ปุ่มจอง -->
-            <button type="submit" class="book-btn">จองตั๋ว</button>
-        </form>
-
-
-
-
-    </section>
-    <div class="screen">SCREEN</div>
-
-    <div class="seating-area">
-        <div class="row">
-            <div class="seat deluxe"><img src="images/chair.png" alt=></div>
-            <div class="seat deluxe"><img src="images/chair.png" alt=></div>
-            <div class="seat deluxe"><img src="images/chair.png" alt=></div>
-            <div class="seat deluxe"><img src="images/chair.png" alt=></div>
-            <div class="seat deluxe"><img src="images/chair.png" alt=></div>
-        </div>
-        <div class="row">
-            <div class="seat premium"><img src="images/chair.png" alt=></div>
-            <div class="seat premium"><img src="images/chair.png" alt=></div>
-            <div class="seat premium"><img src="images/chair.png" alt=></div>
-            <div class="seat premium"><img src="images/chair.png" alt=></div>
-            <div class="seat premium"><img src="images/chair.png" alt=></div>
-        </div>
-        <div class="row">
-            <div class="seat vip"><img src="images/chair.png" alt=></div>
-            <div class="seat vip"><img src="images/chair.png" alt=></div>
-            <div class="seat vip"><img src="images/chair.png" alt=></div>
-            <div class="seat vip"><img src="images/chair.png" alt=></div>
-        </div>
-    </div>
-</main>
-
-<footer>
-    <p>&copy; 2024 VL Cineplex</p>
+<footer style="margin-top:60px;">
+  <p>© 2024 VL Cineplex</p>
 </footer>
 
-<script>
-function handleBooking(event) {
-event.preventDefault(); // หยุดการส่งฟอร์มชั่วคราว
+<script th:inline="javascript">
+  const pricePerSeat = /*[[${price}]]*/ 250;
+  const rows = ['A','B','C','D','E','F','G','H'];
+  const cols = 10;
+  // Mock some taken seats
+  const takenSeats = new Set(['A3','B5','C2','D7','E1','F9']);
+  let selectedSeats = new Set();
 
-// เก็บค่าที่ผู้ใช้เลือก
-const movie = document.getElementById('movie').value;
-const cinema = document.getElementById('cinema').value;
-const time = document.getElementById('time').value;
-const seats = document.getElementById('seats').value;
+  function buildSeatMap() {
+    const map = document.getElementById('seatMap');
+    rows.forEach(row => {
+      const rowDiv = document.createElement('div');
+      rowDiv.className = 'seat-row';
+      const label = document.createElement('div');
+      label.className = 'seat-row-label';
+      label.textContent = row;
+      rowDiv.appendChild(label);
+      for (let c = 1; c <= cols; c++) {
+        const seatId = row + c;
+        const btn = document.createElement('button');
+        btn.className = 'seat ' + (takenSeats.has(seatId) ? 'taken' : 'available');
+        btn.textContent = c;
+        btn.title = 'ที่นั่ง ' + seatId;
+        btn.disabled = takenSeats.has(seatId);
+        if (!takenSeats.has(seatId)) {
+          btn.onclick = () => toggleSeat(seatId, btn);
+        }
+        rowDiv.appendChild(btn);
+      }
+      // gap in middle
+      if (cols > 5) {
+        const gap = rowDiv.children[6];
+        if (gap) gap.style.marginLeft = '16px';
+      }
+      map.appendChild(rowDiv);
+    });
+  }
 
-// สร้างข้อมูลในรูปแบบ JSON
-const bookingData = {
-movie,
-cinema,
-time,
-seats,
-};
+  function toggleSeat(id, btn) {
+    if (selectedSeats.has(id)) {
+      selectedSeats.delete(id);
+      btn.className = 'seat available';
+    } else {
+      selectedSeats.add(id);
+      btn.className = 'seat selected';
+    }
+    updateSummary();
+  }
 
+  function updateSummary() {
+    const count = selectedSeats.size;
+    const total = count * pricePerSeat;
+    document.getElementById('seatCount').textContent = count;
+    document.getElementById('totalPrice').textContent = total.toLocaleString() + ' ฿';
+    document.getElementById('seatsInput').value = count;
+    document.getElementById('seatNumbersInput').value = [...selectedSeats].sort().join(',');
+    document.getElementById('confirmBtn').disabled = count === 0;
 
+    const display = document.getElementById('selectedDisplay');
+    if (count === 0) {
+      display.innerHTML = '<span style="color:var(--text-muted)">กรุณาเลือกที่นั่ง</span>';
+    } else {
+      display.innerHTML = [...selectedSeats].sort().map(s => `<span class="selected-seat-tag">${s}</span>`).join('');
+    }
+  }
 
-if (movie && cinema && time && seats) {
-    // เก็บข้อมูลใน LocalStorage
-    const bookingData = { movie, cinema, time, seats };
-    localStorage.setItem('bookingReceipt', JSON.stringify(bookingData));
-
-    // ส่งข้อมูลไปยังทั้งสองหน้า
-    form.action = '/receipt.html'; // เปลี่ยน action ชั่วคราวไปที่ receipt.html
-    form.submit(); // ส่งฟอร์มไปยัง receipt.html
-} else {
-    alert('กรุณากรอกข้อมูลให้ครบถ้วน');
-}
+  buildSeatMap();
 </script>
 </body>
 </html>
-
-

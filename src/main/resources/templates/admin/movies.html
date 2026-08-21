@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="th">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>จัดการภาพยนตร์ — Admin</title>
+  <link rel="stylesheet" th:href="@{/css/admin.css}">
+</head>
+<body>
+<div class="admin-layout">
+  <aside class="admin-sidebar">
+    <div class="sidebar-logo">VL<span>.</span>Cineplex<small>Admin Panel</small></div>
+    <nav class="sidebar-nav">
+      <div class="sidebar-section-label">หลัก</div>
+      <a href="/admin/dashboard" class="sidebar-link"><span class="icon">📊</span> Dashboard</a>
+      <div class="sidebar-section-label">จัดการข้อมูล</div>
+      <a href="/admin/movies" class="sidebar-link active"><span class="icon">🎬</span> ภาพยนตร์</a>
+      <a href="/admin/showtimes" class="sidebar-link"><span class="icon">🕐</span> รอบฉาย</a>
+      <a href="/admin/promotions" class="sidebar-link"><span class="icon">🎁</span> โปรโมชั่น</a>
+      <div class="sidebar-section-label">ดูข้อมูล</div>
+      <a href="/home" target="_blank" class="sidebar-link"><span class="icon">🌐</span> ดูหน้าเว็บหลัก</a>
+    </nav>
+    <div class="sidebar-footer"><a href="/admin/logout">🚪 ออกจากระบบ</a></div>
+  </aside>
+  <main class="admin-main">
+    <div class="admin-topbar">
+      <div><div class="page-title">🎬 จัดการ<span>ภาพยนตร์</span></div><div class="breadcrumb">Admin › Movies</div></div>
+      <a href="/admin/movies/add" class="btn btn-primary">+ เพิ่มภาพยนตร์</a>
+    </div>
+    <div class="admin-content">
+      <div class="alert alert-success" th:if="${successMessage}" th:text="${successMessage}"></div>
+      <div th:if="${flashMap != null and flashMap['success'] != null}" class="alert alert-success" th:text="${flashMap['success']}"></div>
+
+      <div class="admin-table-wrap">
+        <div class="admin-table-header">
+          <h3>ภาพยนตร์ทั้งหมด (<span th:text="${#lists.size(movies)}">0</span>)</h3>
+        </div>
+        <div th:if="${#lists.isEmpty(movies)}" style="padding:60px; text-align:center; color:var(--text-muted);">
+          <div style="font-size:3rem; margin-bottom:12px;">🎭</div>
+          <p>ยังไม่มีภาพยนตร์ — <a href="/admin/movies/add" style="color:var(--accent);">เพิ่มเลย</a></p>
+        </div>
+        <table class="admin-table" th:unless="${#lists.isEmpty(movies)}">
+          <thead>
+          <tr>
+            <th>โปสเตอร์</th><th>ชื่อภาพยนตร์</th><th>ประเภท</th><th>คะแนน</th><th>ระยะเวลา</th><th>สถานะ</th><th>การจัดการ</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr th:each="m : ${movies}">
+            <td>
+              <img th:if="${m.posterUrl != null and !m.posterUrl.isEmpty()}"
+                   th:src="${m.posterUrl}" class="poster-preview"
+                   onerror="this.style.display='none'">
+              <span th:unless="${m.posterUrl != null and !m.posterUrl.isEmpty()}" style="font-size:2rem;">🎬</span>
+            </td>
+            <td>
+              <div style="font-weight:700;" th:text="${m.title}">Title</div>
+              <div style="font-size:0.78rem; color:var(--text-muted);" th:text="${m.director}">Director</div>
+            </td>
+            <td><span class="badge badge-orange" th:text="${m.genre}">Genre</span></td>
+            <td><span style="color:#fbbf24; font-weight:700;">⭐ <span th:text="${m.rating}">0</span></span></td>
+            <td th:text="${m.durationMinutes} + ' นาที'">-</td>
+            <td>
+              <span class="badge badge-green" th:if="${m.isNowShowing}">กำลังฉาย</span>
+              <span class="badge badge-gray" th:unless="${m.isNowShowing}">หยุดฉาย</span>
+            </td>
+            <td>
+              <div class="table-actions">
+                <a th:href="@{/admin/movies/edit/{id}(id=${m.id})}" class="btn btn-warning btn-sm">✏ แก้ไข</a>
+                <form th:action="@{/admin/movies/delete/{id}(id=${m.id})}" method="post" style="display:inline;"
+                      onsubmit="return confirm('ยืนยันการลบ?')">
+                  <button type="submit" class="btn btn-danger btn-sm">🗑</button>
+                </form>
+              </div>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+</div>
+</body>
+</html>
