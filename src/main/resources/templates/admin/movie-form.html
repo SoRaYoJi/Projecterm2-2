@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="th">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title th:text="${editMode ? 'แก้ไขภาพยนตร์' : 'เพิ่มภาพยนตร์'} + ' — Admin'">Movie Form</title>
+  <link rel="stylesheet" th:href="@{/css/admin.css}">
+  <style>
+    .poster-live-preview { width: 120px; height: 180px; object-fit: cover; border-radius: 8px; border: 2px solid var(--border); margin-top: 8px; display: none; }
+  </style>
+</head>
+<body>
+<div class="admin-layout">
+  <aside class="admin-sidebar">
+    <div class="sidebar-logo">VL<span>.</span>Cineplex<small>Admin Panel</small></div>
+    <nav class="sidebar-nav">
+      <div class="sidebar-section-label">หลัก</div>
+      <a href="/admin/dashboard" class="sidebar-link"><span class="icon">📊</span> Dashboard</a>
+      <div class="sidebar-section-label">จัดการข้อมูล</div>
+      <a href="/admin/movies" class="sidebar-link active"><span class="icon">🎬</span> ภาพยนตร์</a>
+      <a href="/admin/showtimes" class="sidebar-link"><span class="icon">🕐</span> รอบฉาย</a>
+      <a href="/admin/promotions" class="sidebar-link"><span class="icon">🎁</span> โปรโมชั่น</a>
+    </nav>
+    <div class="sidebar-footer"><a href="/admin/logout">🚪 ออกจากระบบ</a></div>
+  </aside>
+  <main class="admin-main">
+    <div class="admin-topbar">
+      <div>
+        <div class="page-title" th:text="${editMode ? '✏ แก้ไขภาพยนตร์' : '+ เพิ่มภาพยนตร์ใหม่'}">Form</div>
+        <div class="breadcrumb">Admin › Movies › <span th:text="${editMode ? 'Edit' : 'Add'}">-</span></div>
+      </div>
+      <a href="/admin/movies" class="btn btn-ghost">← กลับ</a>
+    </div>
+    <div class="admin-content">
+      <div class="form-page">
+        <div class="form-card">
+          <h3 th:text="${editMode ? 'แก้ไขข้อมูลภาพยนตร์' : 'ข้อมูลภาพยนตร์ใหม่'}">Form</h3>
+          <form th:action="${editMode ? '/admin/movies/edit/' + movie.id : '/admin/movies/add'}" method="post">
+            <div class="form-group">
+              <label class="form-label">ชื่อภาพยนตร์ *</label>
+              <input type="text" name="title" class="form-control" th:value="${movie.title}" placeholder="ชื่อภาพยนตร์" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">เรื่องย่อ (Synopsis)</label>
+              <textarea name="synopsis" class="form-control" placeholder="เรื่องย่อของภาพยนตร์..." th:text="${movie.synopsis}"></textarea>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">ผู้กำกับ</label>
+                <input type="text" name="director" class="form-control" th:value="${movie.director}" placeholder="ชื่อผู้กำกับ">
+              </div>
+              <div class="form-group">
+                <label class="form-label">ประเภท (Genre)</label>
+                <input type="text" name="genre" class="form-control" th:value="${movie.genre}" placeholder="เช่น Action / Sci-Fi">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">นักแสดงนำ</label>
+              <input type="text" name="castList" class="form-control" th:value="${movie.castList}" placeholder="ชื่อนักแสดง คั่นด้วยลูกน้ำ">
+            </div>
+            <div class="form-group">
+              <label class="form-label">URL โปสเตอร์</label>
+              <input type="url" name="posterUrl" id="posterUrlInput" class="form-control"
+                     th:value="${movie.posterUrl}" placeholder="https://... (แนะนำขนาด 500x750)"
+                     oninput="previewPoster(this.value)">
+              <img id="posterPreview" class="poster-live-preview"
+                   th:src="${movie.posterUrl}" th:style="${movie.posterUrl != null and !movie.posterUrl.isEmpty()} ? 'display:block;' : 'display:none;'"
+                   alt="Preview">
+            </div>
+            <div class="form-group">
+              <label class="form-label">URL Trailer (YouTube)</label>
+              <input type="url" name="trailerUrl" class="form-control" th:value="${movie.trailerUrl}" placeholder="https://youtube.com/...">
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">ระยะเวลา (นาที)</label>
+                <input type="number" name="durationMinutes" class="form-control" th:value="${movie.durationMinutes != 0 ? movie.durationMinutes : 120}" placeholder="120" min="1">
+              </div>
+              <div class="form-group">
+                <label class="form-label">คะแนน (0-10)</label>
+                <input type="number" name="rating" class="form-control" th:value="${movie.rating}" placeholder="8.5" min="0" max="10" step="0.1">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">ภาษา</label>
+                <select name="language" class="form-control">
+                  <option value="EN" th:selected="${movie.language == 'EN' or movie.language == null}">EN (อังกฤษ)</option>
+                  <option value="TH" th:selected="${movie.language == 'TH'}">TH (ไทย)</option>
+                  <option value="EN/TH" th:selected="${movie.language == 'EN/TH'}">EN/TH (พากย์ไทย)</option>
+                  <option value="JP" th:selected="${movie.language == 'JP'}">JP (ญี่ปุ่น)</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">วันที่เข้าฉาย</label>
+                <input type="date" name="releaseDate" class="form-control"
+                       th:value="${movie.releaseDate != null ? #dates.format(movie.releaseDate, 'yyyy-MM-dd') : ''}">
+              </div>
+            </div>
+            <div class="form-check">
+              <input type="checkbox" name="nowShowing" id="nowShowingCheck" th:checked="${movie.isNowShowing}" value="true">
+              <label for="nowShowingCheck" class="form-label" style="margin-bottom:0; cursor:pointer;">กำลังฉาย (แสดงบนหน้าเว็บหลัก)</label>
+            </div>
+            <div class="form-actions">
+              <button type="submit" class="btn btn-primary">
+                <span th:text="${editMode ? '💾 บันทึกการแก้ไข' : '✅ เพิ่มภาพยนตร์'}">Save</span>
+              </button>
+              <a href="/admin/movies" class="btn btn-ghost">ยกเลิก</a>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+<script>
+  function previewPoster(url) {
+    const img = document.getElementById('posterPreview');
+    if (url) { img.src = url; img.style.display = 'block'; } else { img.style.display = 'none'; }
+  }
+</script>
+</body>
+</html>

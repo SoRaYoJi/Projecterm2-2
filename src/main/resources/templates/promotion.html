@@ -1,52 +1,77 @@
 <!DOCTYPE html>
-<html lang="th">
+<html xmlns:th="http://www.thymeleaf.org" lang="th">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VL Cineplex</title>
-    <link rel="stylesheet" href="css/promotion.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>โปรโมชั่น — VL Cineplex</title>
+  <link rel="stylesheet" th:href="@{/css/main.css}">
+  <style>
+    .page-hero {
+      margin-top: 68px;
+      padding: 60px 40px 40px;
+      background: linear-gradient(180deg, rgba(124,58,237,0.1) 0%, transparent 100%);
+      border-bottom: 1px solid var(--border);
+    }
+    .page-hero-inner { max-width: 1200px; margin: 0 auto; }
+    .page-hero h1 { font-size: 2.5rem; font-weight: 900; margin-bottom: 8px; letter-spacing: -1px; }
+    .main-content { padding: 50px 40px; max-width: 1200px; margin: 0 auto; }
+    .no-promos { text-align: center; padding: 80px 20px; color: var(--text-muted); }
+    .no-promos .icon { font-size: 4rem; margin-bottom: 16px; }
+  </style>
 </head>
 <body>
-<header>
-    <!-- โลโก้ -->
-    <div class="logo-container">
-        <img class="logo" src="images/vl_cineplex.png" alt="VL Cineplex">
-    </div>
 
-    <!-- เมนูนำทาง -->
-    <nav class="nav-menu">
-        <ul>
-            <li><a href="/home">Home page</a></li>
-            <li><a href="/movies">Movies</a></li>
-            <li><a href="/cinema">Cinema</a></li>
-            <li><a href="/promotion">Promotion</a></li>
-        </ul>
-    </nav>
+<nav class="navbar">
+  <a href="/" class="navbar-brand">VL<span>.</span>Cineplex</a>
+  <ul class="navbar-nav">
+    <li><a href="/home">หน้าแรก</a></li>
+    <li><a href="/movies">ภาพยนตร์</a></li>
+    <li><a href="/promotion" class="active">โปรโมชั่น</a></li>
+    <li><a href="/cinema">โรงภาพยนตร์</a></li>
+  </ul>
+  <div class="navbar-actions">
+    <a href="/admin/login" class="btn btn-outline btn-sm">⚙ Admin</a>
+  </div>
+</nav>
 
-    <!-- เมนูด้านขวา -->
-    <div class="right-menu">
-        <!-- ภาษา -->
-        <div class="lang-switch">
-            <a href="#th">TH</a> | <a href="#en">EN</a>
+<div class="page-hero">
+  <div class="page-hero-inner">
+    <h1>โปรโมชั่น<span style="color:var(--accent-orange)">สุดพิเศษ</span></h1>
+    <p style="color:var(--text-secondary);">ข้อเสนอพิเศษจาก VL Cineplex — ประหยัดได้มากขึ้น เพลิดเพลินได้นานขึ้น</p>
+  </div>
+</div>
+
+<div class="main-content">
+  <div th:if="${#lists.isEmpty(promotions)}" class="no-promos">
+    <div class="icon">🎁</div>
+    <h3 style="color:var(--text-secondary); font-size:1.3rem;">ยังไม่มีโปรโมชั่นในขณะนี้</h3>
+    <p>ติดตามโปรโมชั่นใหม่ๆ ได้เร็วๆ นี้</p>
+  </div>
+
+  <div class="promo-grid" th:unless="${#lists.isEmpty(promotions)}">
+    <div class="promo-card" th:each="promo : ${promotions}">
+      <img th:if="${promo.imageUrl != null and !promo.imageUrl.isEmpty()}"
+           th:src="${promo.imageUrl}" th:alt="${promo.title}"
+           onerror="this.style.display='none'">
+      <div style="width:100%; height:200px; background: linear-gradient(135deg, #1a0533, #0a0a14); display:flex; align-items:center; justify-content:center; font-size:3rem;"
+           th:unless="${promo.imageUrl != null and !promo.imageUrl.isEmpty()}">🎟</div>
+      <div class="promo-card-body">
+        <div th:if="${promo.discountPercent > 0}">
+          <span class="promo-discount" th:text="'ลด ' + ${promo.discountPercent} + '%'">ลด 0%</span>
         </div>
-        <!-- ไอคอนผู้ใช้ -->
-        <div class="user-icon">
-            <a href="/profile"><img src="images/user_icon.png" alt="User Icon"></a>
+        <div class="promo-title" th:text="${promo.title}">Promotion Title</div>
+        <div class="promo-desc" th:text="${promo.description}">Description</div>
+        <div class="promo-validity" th:if="${promo.validFrom != null and promo.validTo != null}">
+          📅 ถึง <span th:text="${#dates.format(promo.validTo, 'dd MMM yyyy')}">-</span>
         </div>
+      </div>
     </div>
-</header>
+  </div>
+</div>
 
-<main>
-    <div class="promotion-title">Great Value Promotion</div>
-    <div class="promotion-image">
-        <!-- รูปภาพจะแสดงและเปลี่ยนที่นี่ -->
-        <img id="slideshow-image" src="./images/promotion/p1.jpg" alt="Promotion Slide" />
-
-        <!-- ลิงก์ไปยังไฟล์ promotion.js -->
-        <script src="css/js/promotion.js"></script>
-    </div>
-
-</main>
+<footer>
+  <p>© 2024 VL Cineplex | <a href="/admin/login">สำหรับผู้ดูแลระบบ</a></p>
+</footer>
 
 </body>
 </html>

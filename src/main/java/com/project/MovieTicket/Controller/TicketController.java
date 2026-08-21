@@ -1,33 +1,62 @@
 package com.project.MovieTicket.Controller;
 
-import com.project.MovieTicket.Service.UserService;
+import com.project.MovieTicket.Entity.Booking;
+import com.project.MovieTicket.Repository.BookingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.UUID;
 
 @Controller
 public class TicketController {
 
+    @Autowired
+    private BookingRepository bookingRepository;
+
     @PostMapping("/submit-booking")
     public String submitBooking(
-            @RequestParam("movie") String movie,
-            @RequestParam("cinema") String cinema,
-            @RequestParam("time") String time,
-            @RequestParam("seats") int seats,
+            @RequestParam String movie,
+            @RequestParam String cinema,
+            @RequestParam String time,
+            @RequestParam(defaultValue = "") String date,
+            @RequestParam(defaultValue = "") String hall,
+            @RequestParam int seats,
+            @RequestParam(defaultValue = "") String seatNumbers,
+            @RequestParam double price,
+            @RequestParam String customerName,
+            @RequestParam String customerEmail,
+            @RequestParam String customerPhone,
+            @RequestParam(defaultValue = "PromptPay") String paymentMethod,
             Model model
     ) {
-        // ส่งข้อมูลไปแสดงใน buyticket.html
-        model.addAttribute("movie", movie);
-        model.addAttribute("cinema", cinema);
-        model.addAttribute("time", time);
-        model.addAttribute("seats", seats);
+        double totalPrice = seats * price;
 
-        // เปลี่ยนเส้นทางไปหน้า buyticket.html
-        return "buyticket";
+        // Generate unique booking code
+        String bookingCode = "VL" + UUID.randomUUID().toString().substring(0, 8).toUpperCase();
+
+        Booking booking = new Booking();
+        booking.setBookingCode(bookingCode);
+        booking.setMovieName(movie);
+        booking.setCinema(cinema);
+        booking.setShowDate(date);
+        booking.setShowTime(time);
+        booking.setHall(hall);
+        booking.setSeatsCount(seats);
+        booking.setSeatNumbers(seatNumbers);
+        booking.setPricePerSeat(price);
+        booking.setTotalPrice(totalPrice);
+        booking.setCustomerName(customerName);
+        booking.setCustomerEmail(customerEmail);
+        booking.setCustomerPhone(customerPhone);
+        booking.setPaymentMethod(paymentMethod);
+        booking.setStatus("CONFIRMED");
+
+        Booking saved = bookingRepository.save(booking);
+
+        model.addAttribute("booking", saved);
+        return "receipt";
     }
 }

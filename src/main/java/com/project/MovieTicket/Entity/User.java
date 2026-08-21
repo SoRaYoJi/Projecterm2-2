@@ -3,28 +3,38 @@ package com.project.MovieTicket.Entity;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "userp")  // ชื่อตารางในฐานข้อมูล
+@Table(name = "users")
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)  // เพิ่ม id อัตโนมัติ
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "username", nullable = false, unique = true)  // username ไม่ซ้ำ
+    @Column(name = "username", nullable = false, unique = true)
     private String username;
 
-    @Column(name = "password", nullable = false)  // รหัสผ่าน
+    @Column(name = "password", nullable = false)
     private String password;
 
-    // Constructor
+    private String email;
+
+    private String role = "ROLE_USER";
+
     public User() {}
 
     public User(String username, String password) {
         this.username = username;
         this.password = password;
+        this.role = "ROLE_USER";
     }
 
-    // Getters และ Setters
+    public User(String username, String password, String email) {
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.role = "ROLE_USER";
+    }
+
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
@@ -33,6 +43,12 @@ public class User {
 
     public String getPassword() { return password; }
     public void setPassword(String password) { this.password = password; }
+
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
+
+    public String getRole() { return role; }
+    public void setRole(String role) { this.role = role; }
 }
 
 

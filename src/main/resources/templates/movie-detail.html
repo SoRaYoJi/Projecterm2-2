@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title th:text="${movie.title} + ' — VL Cineplex'">Movie Detail</title>
+  <link rel="stylesheet" th:href="@{/css/main.css}">
+  <style>
+    body { background: var(--bg-primary); }
+    .detail-hero {
+      margin-top: 68px;
+      min-height: 480px;
+      position: relative;
+      display: flex;
+      align-items: flex-end;
+    }
+    .detail-hero-bg {
+      position: absolute; inset: 0;
+      background-size: cover;
+      background-position: center top;
+      filter: brightness(0.25) saturate(0.8);
+    }
+    .detail-hero-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to bottom, transparent 0%, var(--bg-primary) 100%);
+    }
+    .detail-hero-content {
+      position: relative; z-index: 2;
+      max-width: 1200px; margin: 0 auto; width: 100%;
+      padding: 40px 40px 0;
+      display: flex; gap: 40px; align-items: flex-end;
+    }
+    .detail-poster {
+      width: 220px;
+      min-width: 220px;
+      border-radius: var(--radius-lg);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.7);
+      overflow: hidden;
+    }
+    .detail-poster img { width: 100%; display: block; }
+    .detail-info { flex: 1; padding-bottom: 8px; }
+    .detail-title { font-size: clamp(1.8rem, 4vw, 3rem); font-weight: 900; letter-spacing: -1px; margin-bottom: 12px; }
+    .detail-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+    .detail-main { max-width: 1200px; margin: 0 auto; padding: 40px; display: grid; grid-template-columns: 1fr 340px; gap: 40px; }
+    .detail-section { margin-bottom: 36px; }
+    .detail-section h3 { font-size: 1rem; font-weight: 700; color: var(--text-secondary); margin-bottom: 12px; text-transform: uppercase; letter-spacing: 1px; }
+    .detail-synopsis { font-size: 1rem; color: var(--text-secondary); line-height: 1.8; }
+    .crew-item { display: flex; flex-direction: column; gap: 2px; margin-bottom: 10px; }
+    .crew-role { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+    .crew-name { font-weight: 600; }
+    .showtime-group { margin-bottom: 24px; }
+    .showtime-cinema { font-size: 1rem; font-weight: 700; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+    .showtime-times { display: flex; flex-wrap: wrap; gap: 8px; }
+    .showtime-btn {
+      display: flex; flex-direction: column; align-items: center;
+      padding: 10px 16px;
+      background: var(--bg-card);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius);
+      cursor: pointer;
+      text-decoration: none;
+      color: var(--text-primary);
+      transition: all 0.2s;
+      min-width: 90px;
+    }
+    .showtime-btn:hover { border-color: var(--accent-orange); background: rgba(249,115,22,0.08); }
+    .showtime-time { font-size: 1.1rem; font-weight: 800; }
+    .showtime-price { font-size: 0.75rem; color: var(--accent-orange); font-weight: 600; }
+    .showtime-avail { font-size: 0.7rem; color: var(--text-muted); }
+    .sidebar-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 24px; position: sticky; top: 88px; }
+    .sidebar-card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 16px; }
+    .rating-big { font-size: 3rem; font-weight: 900; color: #fbbf24; line-height: 1; }
+    .rating-stars { color: #fbbf24; font-size: 1.2rem; margin: 4px 0; }
+    @media (max-width: 768px) {
+      .detail-hero-content { flex-direction: column; align-items: flex-start; padding: 20px; }
+      .detail-poster { width: 160px; min-width: 160px; }
+      .detail-main { grid-template-columns: 1fr; padding: 20px; }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="navbar">
+  <a href="/" class="navbar-brand">VL<span>.</span>Cineplex</a>
+  <ul class="navbar-nav">
+    <li><a href="/home">หน้าแรก</a></li>
+    <li><a href="/movies" class="active">ภาพยนตร์</a></li>
+    <li><a href="/promotion">โปรโมชั่น</a></li>
+    <li><a href="/cinema">โรงภาพยนตร์</a></li>
+  </ul>
+  <div class="navbar-actions">
+    <a href="/admin/login" class="btn btn-outline btn-sm">⚙ Admin</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="detail-hero">
+  <div class="detail-hero-bg" th:style="'background-image: url(' + ${movie.posterUrl} + ')'"></div>
+  <div class="detail-hero-overlay"></div>
+  <div class="detail-hero-content">
+    <div class="detail-poster">
+      <img th:src="${movie.posterUrl}" th:alt="${movie.title}"
+           onerror="this.parentElement.innerHTML='<div style=\'background:var(--bg-card);aspect-ratio:2/3;display:flex;align-items:center;justify-content:center;font-size:4rem;\'>🎬</div>'">
+    </div>
+    <div class="detail-info">
+      <div class="detail-tags">
+        <span class="badge badge-orange">กำลังฉาย</span>
+        <span class="badge badge-purple" th:text="${movie.language}">EN</span>
+      </div>
+      <h1 class="detail-title" th:text="${movie.title}">Movie Title</h1>
+      <div class="detail-tags">
+        <span class="hero-tag" th:text="${movie.genre}">Genre</span>
+        <span class="hero-tag">⏱ <span th:text="${movie.durationMinutes}">120</span> นาที</span>
+        <span class="hero-tag">⭐ <span th:text="${movie.rating}">0.0</span></span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="detail-main">
+  <div>
+    <!-- Synopsis -->
+    <div class="detail-section">
+      <h3>เรื่องย่อ</h3>
+      <p class="detail-synopsis" th:text="${movie.synopsis}">Synopsis...</p>
+    </div>
+
+    <!-- Director & Cast -->
+    <div class="detail-section">
+      <h3>ทีมงาน</h3>
+      <div class="crew-item" th:if="${movie.director != null}">
+        <span class="crew-role">ผู้กำกับ</span>
+        <span class="crew-name" th:text="${movie.director}">Director</span>
+      </div>
+      <div class="crew-item" th:if="${movie.castList != null}">
+        <span class="crew-role">นักแสดงนำ</span>
+        <span class="crew-name" th:text="${movie.castList}">Cast</span>
+      </div>
+    </div>
+
+    <!-- Showtimes -->
+    <div class="detail-section">
+      <h3>รอบฉาย — เลือกที่นั่ง</h3>
+      <div th:if="${#lists.isEmpty(showtimes)}" style="color:var(--text-muted); padding: 20px 0;">
+        ยังไม่มีรอบฉายสำหรับภาพยนตร์เรื่องนี้
+      </div>
+      <div th:unless="${#lists.isEmpty(showtimes)}">
+        <!-- Group by cinema (simplified - just show all) -->
+        <div th:each="st : ${showtimes}" style="margin-bottom:8px;">
+          <div style="display:flex; align-items:center; gap:12px; padding: 12px 16px; background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius);">
+            <div style="flex:1;">
+              <div style="font-weight:700;" th:text="${st.cinema}">Cinema</div>
+              <div style="font-size:0.8rem; color:var(--text-muted);" th:text="${st.hall}">Hall</div>
+            </div>
+            <div style="text-align:center;">
+              <div style="font-size:1.2rem; font-weight:900; color:var(--accent-orange);" th:text="${st.showTime}">12:00</div>
+              <div style="font-size:0.75rem; color:var(--text-muted);">เวลา</div>
+            </div>
+            <div style="text-align:center;">
+              <div style="font-weight:700;" th:text="${st.price} + ' ฿'">250 ฿</div>
+              <div style="font-size:0.75rem; color:var(--text-muted);" th:text="${st.availableSeats} + ' ที่นั่ง'">60 ที่นั่ง</div>
+            </div>
+            <a th:href="@{/seat(movie=${movie.title},cinema=${st.cinema},time=${st.showTime},hall=${st.hall},price=${st.price})}"
+               class="btn btn-primary btn-sm">เลือกที่นั่ง</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SIDEBAR -->
+  <div>
+    <div class="sidebar-card">
+      <h3>คะแนน</h3>
+      <div class="rating-big" th:text="${movie.rating}">0.0</div>
+      <div class="rating-stars">⭐⭐⭐⭐⭐</div>
+      <hr class="divider">
+      <div class="crew-item">
+        <span class="crew-role">ประเภท</span>
+        <span class="crew-name" th:text="${movie.genre}">Genre</span>
+      </div>
+      <div class="crew-item">
+        <span class="crew-role">ระยะเวลา</span>
+        <span class="crew-name" th:text="${movie.durationMinutes} + ' นาที'">120 นาที</span>
+      </div>
+      <div class="crew-item">
+        <span class="crew-role">ภาษา</span>
+        <span class="crew-name" th:text="${movie.language}">EN</span>
+      </div>
+      <div class="crew-item" th:if="${movie.releaseDate != null}">
+        <span class="crew-role">วันเข้าฉาย</span>
+        <span class="crew-name" th:text="${#dates.format(movie.releaseDate, 'dd MMM yyyy')}">-</span>
+      </div>
+      <hr class="divider">
+      <a th:if="${not #lists.isEmpty(showtimes)}"
+         th:href="@{/seat(movie=${movie.title},cinema=${showtimes[0].cinema},time=${showtimes[0].showTime},hall=${showtimes[0].hall},price=${showtimes[0].price})}"
+         class="btn btn-primary" style="width:100%; justify-content:center; margin-top:4px;">
+        🎟 จองตั๋วเลย
+      </a>
+      <a href="/movies" class="btn btn-ghost" style="width:100%; justify-content:center; margin-top:8px;">← กลับ</a>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <p>© 2024 VL Cineplex | <a href="/admin/login">สำหรับผู้ดูแลระบบ</a></p>
+</footer>
+
+</body>
+</html>

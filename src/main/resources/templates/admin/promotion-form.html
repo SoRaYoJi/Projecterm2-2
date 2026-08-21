@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="th">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title th:text="${editMode ? 'แก้ไขโปรโมชั่น' : 'เพิ่มโปรโมชั่น'} + ' — Admin'">Promotion Form</title>
+  <link rel="stylesheet" th:href="@{/css/admin.css}">
+</head>
+<body>
+<div class="admin-layout">
+  <aside class="admin-sidebar">
+    <div class="sidebar-logo">VL<span>.</span>Cineplex<small>Admin Panel</small></div>
+    <nav class="sidebar-nav">
+      <div class="sidebar-section-label">หลัก</div>
+      <a href="/admin/dashboard" class="sidebar-link"><span class="icon">📊</span> Dashboard</a>
+      <div class="sidebar-section-label">จัดการข้อมูล</div>
+      <a href="/admin/movies" class="sidebar-link"><span class="icon">🎬</span> ภาพยนตร์</a>
+      <a href="/admin/showtimes" class="sidebar-link"><span class="icon">🕐</span> รอบฉาย</a>
+      <a href="/admin/promotions" class="sidebar-link active"><span class="icon">🎁</span> โปรโมชั่น</a>
+    </nav>
+    <div class="sidebar-footer"><a href="/admin/logout">🚪 ออกจากระบบ</a></div>
+  </aside>
+  <main class="admin-main">
+    <div class="admin-topbar">
+      <div><div class="page-title" th:text="${editMode ? '✏ แก้ไขโปรโมชั่น' : '+ เพิ่มโปรโมชั่น'}">Form</div><div class="breadcrumb">Admin › Promotions › Form</div></div>
+      <a href="/admin/promotions" class="btn btn-ghost">← กลับ</a>
+    </div>
+    <div class="admin-content">
+      <div class="form-page">
+        <div class="form-card">
+          <h3>ข้อมูลโปรโมชั่น</h3>
+          <form th:action="${editMode ? '/admin/promotions/edit/' + promotion.id : '/admin/promotions/add'}" method="post">
+            <div class="form-group">
+              <label class="form-label">ชื่อโปรโมชั่น *</label>
+              <input type="text" name="title" class="form-control" th:value="${promotion.title}" placeholder="ชื่อโปรโมชั่น" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">รายละเอียด</label>
+              <textarea name="description" class="form-control" placeholder="รายละเอียดโปรโมชั่น..." th:text="${promotion.description}"></textarea>
+            </div>
+            <div class="form-group">
+              <label class="form-label">URL รูปภาพ</label>
+              <input type="url" name="imageUrl" class="form-control" th:value="${promotion.imageUrl}" placeholder="https://..." oninput="previewImg(this.value)">
+              <img id="imgPreview" style="width:100%; max-width:400px; height:200px; object-fit:cover; border-radius:8px; margin-top:8px; display:none;"
+                   th:src="${promotion.imageUrl}"
+                   th:style="${promotion.imageUrl != null and !promotion.imageUrl.isEmpty()} ? 'display:block;' : 'display:none;'"
+                   alt="Preview">
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">ส่วนลด (%) — ใส่ 0 ถ้าไม่มี</label>
+                <input type="number" name="discountPercent" class="form-control" th:value="${promotion.discountPercent}" placeholder="0" min="0" max="100">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">วันที่เริ่มต้น</label>
+                <input type="date" name="validFrom" class="form-control"
+                       th:value="${promotion.validFrom != null ? #dates.format(promotion.validFrom, 'yyyy-MM-dd') : ''}">
+              </div>
+              <div class="form-group">
+                <label class="form-label">วันที่สิ้นสุด</label>
+                <input type="date" name="validTo" class="form-control"
+                       th:value="${promotion.validTo != null ? #dates.format(promotion.validTo, 'yyyy-MM-dd') : ''}">
+              </div>
+            </div>
+            <div class="form-check">
+              <input type="checkbox" name="active" id="activeCheck" th:checked="${promotion.active}" value="true">
+              <label for="activeCheck" class="form-label" style="margin-bottom:0; cursor:pointer;">เปิดใช้งาน (แสดงบนหน้าเว็บ)</label>
+            </div>
+            <div class="form-actions">
+              <button type="submit" class="btn btn-primary" th:text="${editMode ? '💾 บันทึก' : '✅ เพิ่มโปรโมชั่น'}">Save</button>
+              <a href="/admin/promotions" class="btn btn-ghost">ยกเลิก</a>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+<script>
+  function previewImg(url) {
+    const img = document.getElementById('imgPreview');
+    if (url) { img.src = url; img.style.display = 'block'; } else { img.style.display = 'none'; }
+  }
+</script>
+</body>
+</html>

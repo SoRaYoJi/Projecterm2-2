@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="th">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>จัดการรอบฉาย — Admin</title>
+  <link rel="stylesheet" th:href="@{/css/admin.css}">
+</head>
+<body>
+<div class="admin-layout">
+  <aside class="admin-sidebar">
+    <div class="sidebar-logo">VL<span>.</span>Cineplex<small>Admin Panel</small></div>
+    <nav class="sidebar-nav">
+      <div class="sidebar-section-label">หลัก</div>
+      <a href="/admin/dashboard" class="sidebar-link"><span class="icon">📊</span> Dashboard</a>
+      <div class="sidebar-section-label">จัดการข้อมูล</div>
+      <a href="/admin/movies" class="sidebar-link"><span class="icon">🎬</span> ภาพยนตร์</a>
+      <a href="/admin/showtimes" class="sidebar-link active"><span class="icon">🕐</span> รอบฉาย</a>
+      <a href="/admin/promotions" class="sidebar-link"><span class="icon">🎁</span> โปรโมชั่น</a>
+    </nav>
+    <div class="sidebar-footer"><a href="/admin/logout">🚪 ออกจากระบบ</a></div>
+  </aside>
+  <main class="admin-main">
+    <div class="admin-topbar">
+      <div><div class="page-title">🕐 จัดการ<span>รอบฉาย</span></div><div class="breadcrumb">Admin › Showtimes</div></div>
+      <a href="/admin/showtimes/add" class="btn btn-primary">+ เพิ่มรอบฉาย</a>
+    </div>
+    <div class="admin-content">
+      <div class="admin-table-wrap">
+        <div class="admin-table-header">
+          <h3>รอบฉายทั้งหมด (<span th:text="${#lists.size(showtimes)}">0</span>)</h3>
+        </div>
+        <div th:if="${#lists.isEmpty(showtimes)}" style="padding:60px; text-align:center; color:var(--text-muted);">
+          ยังไม่มีรอบฉาย — <a href="/admin/showtimes/add" style="color:var(--accent);">เพิ่มเลย</a>
+        </div>
+        <table class="admin-table" th:unless="${#lists.isEmpty(showtimes)}">
+          <thead>
+          <tr><th>ภาพยนตร์</th><th>โรงภาพยนตร์</th><th>วันที่</th><th>เวลา</th><th>โรง</th><th>ราคา</th><th>ที่นั่งว่าง</th><th>การจัดการ</th></tr>
+          </thead>
+          <tbody>
+          <tr th:each="st : ${showtimes}">
+            <td style="font-weight:700;" th:text="${st.movie.title}">-</td>
+            <td th:text="${st.cinema}">-</td>
+            <td th:text="${st.showDate != null ? #dates.format(st.showDate, 'dd/MM/yyyy') : '-'}">-</td>
+            <td><span style="color:var(--accent); font-weight:700;" th:text="${st.showTime}">-</span></td>
+            <td th:text="${st.hall}">-</td>
+            <td th:text="${st.price} + ' ฿'">-</td>
+            <td>
+              <span th:text="${st.availableSeats} + '/' + ${st.totalSeats}"
+                    th:class="${st.availableSeats == 0} ? 'badge badge-red' : 'badge badge-green'">-</span>
+            </td>
+            <td>
+              <div class="table-actions">
+                <a th:href="@{/admin/showtimes/edit/{id}(id=${st.id})}" class="btn btn-warning btn-sm">✏</a>
+                <form th:action="@{/admin/showtimes/delete/{id}(id=${st.id})}" method="post" style="display:inline;" onsubmit="return confirm('ลบรอบฉายนี้?')">
+                  <button type="submit" class="btn btn-danger btn-sm">🗑</button>
+                </form>
+              </div>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+</div>
+</body>
+</html>

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Login — VL Cineplex</title>
+  <link rel="stylesheet" th:href="@{/css/admin.css}">
+  <style>
+    body { display: flex; align-items: center; justify-content: center; min-height: 100vh; background: var(--bg-primary); }
+    body::before {
+      content: ''; position: fixed; inset: 0;
+      background: radial-gradient(ellipse at 30% 40%, rgba(124,58,237,0.15) 0%, transparent 60%),
+                  radial-gradient(ellipse at 70% 70%, rgba(249,115,22,0.08) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    .login-card {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: 20px; padding: 48px 40px; width: 100%; max-width: 420px;
+      position: relative; z-index: 1;
+    }
+    .login-logo { font-size: 1.6rem; font-weight: 900; text-align: center; margin-bottom: 8px; }
+    .login-logo span { color: var(--accent); }
+    .login-subtitle { text-align: center; color: var(--text-muted); font-size: 0.85rem; margin-bottom: 32px; }
+    .login-title { text-align: center; font-size: 1.2rem; font-weight: 700; margin-bottom: 24px; color: var(--text-secondary); }
+    .error-msg {
+      background: rgba(239,68,68,0.12); border: 1px solid rgba(239,68,68,0.3);
+      color: #fca5a5; padding: 12px 16px; border-radius: 8px;
+      font-size: 0.85rem; margin-bottom: 20px; text-align: center;
+    }
+    .success-msg {
+      background: rgba(34,197,94,0.12); border: 1px solid rgba(34,197,94,0.3);
+      color: #86efac; padding: 12px 16px; border-radius: 8px;
+      font-size: 0.85rem; margin-bottom: 20px; text-align: center;
+    }
+    .login-btn { width: 100%; justify-content: center; padding: 13px; font-size: 1rem; margin-top: 4px; }
+    .back-link { display: block; text-align: center; margin-top: 20px; color: var(--text-muted); text-decoration: none; font-size: 0.85rem; }
+    .back-link:hover { color: var(--accent); }
+  </style>
+</head>
+<body>
+  <div class="login-card">
+    <div class="login-logo">VL<span>.</span>Cineplex</div>
+    <div class="login-subtitle">ระบบจัดการภายใน</div>
+    <div class="login-title">🔐 เข้าสู่ระบบ Admin</div>
+
+    <div class="error-msg" th:if="${param.error}">
+      ❌ ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง
+    </div>
+    <div class="success-msg" th:if="${param.logout}">
+      ✅ ออกจากระบบสำเร็จ
+    </div>
+
+    <form th:action="@{/admin/login}" method="post">
+      <div class="form-group">
+        <label class="form-label">ชื่อผู้ใช้</label>
+        <input type="text" name="username" class="form-control" placeholder="admin" required autofocus>
+      </div>
+      <div class="form-group">
+        <label class="form-label">รหัสผ่าน</label>
+        <input type="password" name="password" class="form-control" placeholder="••••••••" required>
+      </div>
+      <button type="submit" class="btn btn-primary login-btn">เข้าสู่ระบบ</button>
+    </form>
+    <a href="/home" class="back-link">← กลับสู่เว็บหลัก</a>
+  </div>
+</body>
+</html>

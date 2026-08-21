@@ -1,44 +1,94 @@
 <!DOCTYPE html>
-<html lang="th">
+<html xmlns:th="http://www.thymeleaf.org" lang="th">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>User Profile</title>
-  <link rel="stylesheet" href="css/profile.css">
+  <title>ค้นหาตั๋วของฉัน — VL Cineplex</title>
+  <link rel="stylesheet" th:href="@{/css/main.css}">
+  <style>
+    .page-hero {
+      margin-top: 68px;
+      padding: 60px 40px 40px;
+      background: linear-gradient(180deg, rgba(124,58,237,0.1) 0%, transparent 100%);
+      border-bottom: 1px solid var(--border);
+    }
+    .page-hero-inner { max-width: 800px; margin: 0 auto; text-align: center; }
+    .main-content { padding: 50px 40px; max-width: 800px; margin: 0 auto; }
+    .ticket-card {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: var(--radius-lg); padding: 24px; margin-bottom: 20px;
+    }
+    .ticket-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+    .ticket-code { font-size: 1.2rem; font-weight: 900; color: var(--accent-orange); letter-spacing: 1px; }
+    .ticket-row { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 0.9rem; }
+  </style>
 </head>
 <body>
-<header>
-  <!-- โลโก้ -->
-  <div class="logo-container">
-    <img class="logo" src="images/vl_cineplex.png" alt="VL Cineplex">
+
+<nav class="navbar">
+  <a href="/" class="navbar-brand">VL<span>.</span>Cineplex</a>
+  <ul class="navbar-nav">
+    <li><a href="/home">หน้าแรก</a></li>
+    <li><a href="/movies">ภาพยนตร์</a></li>
+    <li><a href="/promotion">โปรโมชั่น</a></li>
+    <li><a href="/my-tickets" class="active">ตั๋วของฉัน</a></li>
+  </ul>
+  <div class="navbar-actions">
+    <a href="/admin/login" class="btn btn-outline btn-sm">⚙ Admin</a>
+  </div>
+</nav>
+
+<div class="page-hero">
+  <div class="page-hero-inner">
+    <h1>ค้นหา<span style="color:var(--accent-orange)">ตั๋วของฉัน</span></h1>
+    <p style="color:var(--text-secondary); margin-bottom:24px;">กรอกรหัสการจอง (เช่น VL12345678) หรืออีเมลที่ใช้จองตั๋ว</p>
+
+    <form action="/my-tickets" method="GET">
+      <div class="search-container" style="max-width:500px; margin:0 auto;">
+        <div class="search-input-wrap">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+          </svg>
+          <input class="search-input" type="text" name="query" placeholder="รหัสการจอง หรือ อีเมล..."
+                 th:value="${query}" required>
+        </div>
+        <button type="submit" class="btn btn-primary">ค้นหา</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="main-content">
+  <div th:if="${query != null and query != '' and #lists.isEmpty(bookings)}" class="text-center" style="padding:60px 0; color:var(--text-muted);">
+    <div style="font-size:3rem; margin-bottom:12px;">🎟</div>
+    <h3 style="color:var(--text-secondary);">ไม่พบข้อมูลตั๋วภาพยนตร์</h3>
+    <p>โปรดตรวจสอบรหัสจองหรืออีเมลอีกครั้ง</p>
   </div>
 
-  <!-- เมนูนำทาง -->
-  <nav class="nav-menu">
-    <ul>
-      <li><a href="/home">Home page</a></li>
-      <li><a href="/movies">Movies</a></li>
-      <li><a href="/cinema">Cinema</a></li>
-      <li><a href="/promotion">Promotion</a></li>
-    </ul>
-  </nav>
-</header>
-
-<main>
-  <section class="profile">
-    <h1>User Profile</h1>
-    <div class="profile-details">
-      <p><strong>Username:</strong> B6632830</p>
-      <p><strong>Email:</strong> B6632830@sut.ac.th</p>
+  <div th:unless="${#lists.isEmpty(bookings)}">
+    <h3 style="font-size:1.1rem; font-weight:700; margin-bottom:20px;">รายการตั๋วภาพยนตร์ (<span th:text="${#lists.size(bookings)}">0</span>)</h3>
+    <div th:each="b : ${bookings}" class="ticket-card">
+      <div class="ticket-header">
+        <div>
+          <span style="font-size:0.75rem; color:var(--text-muted); text-transform:uppercase;">รหัสการจอง</span>
+          <div class="ticket-code" th:text="${b.bookingCode}">VL-XXXXXXX</div>
+        </div>
+        <span class="badge badge-green" th:text="${b.status}">CONFIRMED</span>
+      </div>
+      <div class="ticket-row"><span class="text-secondary">ภาพยนตร์</span><span class="fw-bold" th:text="${b.movieName}">-</span></div>
+      <div class="ticket-row"><span class="text-secondary">โรงภาพยนตร์</span><span th:text="${b.cinema}">-</span></div>
+      <div class="ticket-row" th:if="${b.hall != null and b.hall != ''}"><span class="text-secondary">โรง</span><span th:text="${b.hall}">-</span></div>
+      <div class="ticket-row"><span class="text-secondary">รอบฉาย</span><span th:text="${b.showTime}">-</span></div>
+      <div class="ticket-row"><span class="text-secondary">ที่นั่ง</span><span class="fw-bold" style="color:var(--accent-orange);" th:text="${b.seatNumbers != null and b.seatNumbers != '' ? b.seatNumbers : b.seatsCount + ' ที่นั่ง'}">-</span></div>
+      <div class="ticket-row"><span class="text-secondary">ชื่อผู้จอง</span><span th:text="${b.customerName}">-</span></div>
+      <div class="ticket-row"><span class="text-secondary">ราคารวม</span><span class="fw-bold" th:text="${b.totalPrice} + ' ฿'">-</span></div>
     </div>
-    <div class="logout-button">
-      <a href="/login" class="btn-logout">Logout</a>
-    </div>
-  </section>
-</main>
+  </div>
+</div>
 
 <footer>
-  <p>&copy; 2024 VL Cineplex</p>
+  <p>© 2024 VL Cineplex | <a href="/admin/login">สำหรับผู้ดูแลระบบ</a></p>
 </footer>
+
 </body>
 </html>

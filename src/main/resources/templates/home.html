@@ -1,56 +1,120 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<html lang="th">
+<html xmlns:th="http://www.thymeleaf.org" lang="th">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VL Cineplex</title>
-    <link rel="stylesheet" href="css/style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VL Cineplex — ดูหนัง จองตั๋ว ง่ายๆ</title>
+  <link rel="stylesheet" th:href="@{/css/main.css}">
+  <style>
+    .hero { min-height: calc(100vh - 68px); }
+    .now-showing-strip {
+      background: var(--bg-secondary);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 60px 40px;
+    }
+    .stat-bar {
+      display: flex;
+      gap: 40px;
+      padding: 20px 0;
+      border-top: 1px solid var(--border);
+      margin-top: 32px;
+      flex-wrap: wrap;
+    }
+    .stat-item { text-align: center; }
+    .stat-num { font-size: 1.8rem; font-weight: 900; color: var(--accent-orange); }
+    .stat-label { font-size: 0.8rem; color: var(--text-muted); margin-top: 4px; }
+  </style>
 </head>
 <body>
-<header>
-    <!-- โลโก้ -->
-    <div class="logo-container">
-        <img class="logo" src="images/vl_cineplex.png" alt="VL Cineplex">
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <a href="/" class="navbar-brand">VL<span>.</span>Cineplex</a>
+  <ul class="navbar-nav">
+    <li><a href="/home" class="active">หน้าแรก</a></li>
+    <li><a href="/movies">ภาพยนตร์</a></li>
+    <li><a href="/promotion">โปรโมชั่น</a></li>
+    <li><a href="/cinema">โรงภาพยนตร์</a></li>
+  </ul>
+  <div class="navbar-actions">
+    <a href="/admin/login" class="btn btn-outline btn-sm">⚙ Admin</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" th:if="${featuredMovie != null}">
+  <div class="hero-bg" th:style="'background-image: url(' + ${featuredMovie.posterUrl} + ')'"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <div class="hero-badge">🎬 กำลังฉายตอนนี้</div>
+    <h1 class="hero-title" th:text="${featuredMovie.title}">MOVIE TITLE</h1>
+    <div class="hero-meta">
+      <span class="hero-tag" th:text="${featuredMovie.genre}">Genre</span>
+      <span class="hero-tag">⏱ <span th:text="${featuredMovie.durationMinutes}">120</span> นาที</span>
+      <span class="hero-tag">⭐ <span th:text="${featuredMovie.rating}">8.0</span></span>
+      <span class="hero-tag" th:text="${featuredMovie.language}">EN</span>
+    </div>
+    <p class="hero-desc" th:text="${featuredMovie.synopsis}">Synopsis...</p>
+    <div class="hero-actions">
+      <a th:href="@{/movies/{id}(id=${featuredMovie.id})}" class="btn btn-primary btn-lg">🎟 จองตั๋วเลย</a>
+      <a th:href="@{/movies/{id}(id=${featuredMovie.id})}" class="btn btn-outline btn-lg">ดูรายละเอียด</a>
+    </div>
+  </div>
+</section>
+
+<!-- Fallback hero if no movies -->
+<section class="hero" th:if="${featuredMovie == null}"
+         style="background: linear-gradient(135deg, #0a0a14 0%, #1a0533 100%); display:flex; align-items:center; justify-content:center; text-align:center;">
+  <div style="position:relative; z-index:2; padding: 60px 40px;">
+    <div class="hero-badge">🎬 VL Cineplex</div>
+    <h1 class="hero-title">ยินดีต้อนรับสู่<br><span class="highlight">VL Cineplex</span></h1>
+    <p class="hero-desc" style="margin: 0 auto 32px;">โรงภาพยนตร์ที่ให้ประสบการณ์การดูหนังที่ดีที่สุด</p>
+    <a href="/movies" class="btn btn-primary btn-lg">ดูภาพยนตร์ทั้งหมด</a>
+  </div>
+</section>
+
+<!-- NOW SHOWING -->
+<div class="now-showing-strip">
+  <div style="max-width:1200px; margin:0 auto;">
+    <div class="section-header">
+      <h2 class="section-title">กำลังฉาย <span>ตอนนี้</span></h2>
+      <a href="/movies" class="btn btn-outline btn-sm">ดูทั้งหมด →</a>
+    </div>
+    <div class="movies-grid">
+      <a th:each="movie : ${movies}" th:href="@{/movies/{id}(id=${movie.id})}" class="movie-card">
+        <img class="movie-card-poster"
+             th:if="${movie.posterUrl != null and !movie.posterUrl.isEmpty()}"
+             th:src="${movie.posterUrl}"
+             th:alt="${movie.title}"
+             onerror="this.parentElement.innerHTML='<div class=\'movie-card-poster-placeholder\'>🎬</div>'">
+        <div class="movie-card-poster-placeholder"
+             th:unless="${movie.posterUrl != null and !movie.posterUrl.isEmpty()}">🎬</div>
+        <div class="movie-card-body">
+          <div class="movie-card-title" th:text="${movie.title}">Movie Title</div>
+          <div class="movie-card-meta">
+            <span class="movie-rating">⭐ <span th:text="${movie.rating}">0.0</span></span>
+            <span class="movie-genre" th:text="${movie.genre != null ? movie.genre.split('/')[0].trim() : 'Movie'}">Genre</span>
+          </div>
+          <span class="badge badge-orange" th:text="${movie.durationMinutes} + ' นาที'">120 นาที</span>
+        </div>
+        <div class="movie-card-footer">
+          <span class="btn btn-primary btn-sm" style="width:100%; justify-content:center;">🎟 จองตั๋ว</span>
+        </div>
+      </a>
     </div>
 
-    <!-- เมนูนำทาง -->
-    <nav class="nav-menu">
-        <ul>
-            <li><a href="/home">Home page</a></li>
-            <li><a href="/movies">Movies</a></li>
-            <li><a href="/cinema">Cinema</a></li>
-            <li><a href="/promotion">Promotion</a></li>
-        </ul>
-    </nav>
-
-    <!-- เมนูด้านขวา -->
-    <div class="right-menu">
-        <!-- ภาษา -->
-        <div class="lang-switch">
-            <a href="#th">TH</a> | <a href="#en">EN</a>
-        </div>
-        <!-- ไอคอนผู้ใช้ -->
-        <div class="user-icon">
-            <a href="/profile"><img src="images/user_icon.png" alt="User Icon"></a>
-        </div>
+    <div class="stat-bar">
+      <div class="stat-item"><div class="stat-num" th:text="${#lists.size(movies)}">4</div><div class="stat-label">ภาพยนตร์กำลังฉาย</div></div>
+      <div class="stat-item"><div class="stat-num">4</div><div class="stat-label">สาขาทั่วประเทศ</div></div>
+      <div class="stat-item"><div class="stat-num">250฿+</div><div class="stat-label">ราคาเริ่มต้น</div></div>
     </div>
-</header>
-
-<main>
-    <section class="movies">
-        <!-- ใช้ Thymeleaf เพื่อแสดงผลภาพยนตร์สุ่ม 3 เรื่อง -->
-        <div th:each="movie : ${movies}" class="movie">
-            <!-- ดึง URL ของภาพยนตร์จากข้อมูลที่เก็บในฐานข้อมูล -->
-            <img th:src="@{${movie.imagePath}}" th:alt="${movie.moviename}" />
-            <h2 th:text="${movie.moviename}"></h2>
-        </div>
-    </section>
-</main>
-
+  </div>
+</div>
 
 <footer>
-    <p>&copy; 2024 VL Cineplex</p>
+  <p>© 2024 VL Cineplex — จองตั๋วออนไลน์ง่ายๆ ทุกเวลา | <a href="/admin/login">สำหรับผู้ดูแลระบบ</a></p>
 </footer>
+
 </body>
 </html>

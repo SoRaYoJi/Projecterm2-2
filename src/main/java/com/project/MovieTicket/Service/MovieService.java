@@ -16,19 +16,20 @@ public class MovieService {
         this.movieRepository = movieRepository;
     }
 
-    // ดึงภาพยนตร์ทั้งหมด
     public List<Movie> getAllMovies() {
         return movieRepository.findAll();
     }
 
-    // ค้นหาภาพยนตร์ตามคำค้น
     public List<Movie> searchMovies(String query) {
-        return movieRepository.findByMovienameContainingIgnoreCase(query);
+        if (query == null || query.isBlank()) {
+            return movieRepository.findAll();
+        }
+        return movieRepository.findByTitleContainingIgnoreCase(query);
     }
 
     public List<Movie> getRandomMovies(int count) {
         List<Movie> allMovies = movieRepository.findAll();
-        Collections.shuffle(allMovies); // สุ่มลำดับ
-        return allMovies.stream().limit(count).toList(); // คืนค่าจำนวนที่ต้องการ
+        Collections.shuffle(allMovies);
+        return allMovies.stream().limit(count).toList();
     }
 }
